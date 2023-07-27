@@ -7,7 +7,7 @@
 	import Admin from "./pages/admin/Admin.svelte";
 	import Adminrule from "./pages/adminrule/Adminrule.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
-	import Domain from "./pages/domain/Domain.svelte";
+	import Catebank from "./pages/catebank/Catebank.svelte";
 	import Login from "./pages/Login.svelte";
 	import NotFound from "./pages/NotFound.svelte";
 	export let table_header_font;
@@ -32,6 +32,13 @@
 				},
 				component: Dashboard,
 			}),
+			"/catebank": wrap({
+				component: Catebank,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
+			}),
 			"/currency": wrap({
 				component: Currency,
 				props: {
@@ -39,13 +46,7 @@
 					table_body_font: table_body_font,
 				},
 			}),
-			"/domain": wrap({
-				component: Domain,
-				props: {
-					table_header_font: table_header_font,
-					table_body_font: table_body_font,
-				},
-			}),
+			
 			"/admin": wrap({
 				component: Admin,
 				props: {
