@@ -14,7 +14,7 @@
 	export let listHome = []
 	export let totalrecord = 0
     let dispatch = createEventDispatcher();
-	let title_page = "CURRENCY"
+	let title_page = "MASTER"
     let sData = "";
     let myModal_newentry = "";
     let flag_id_field = false;
@@ -196,7 +196,7 @@
                             on:keypress={handleKeyboard_checkenter}
                             type="text"
                             class="form-control"
-                            placeholder="Search Currency"
+                            placeholder="Search Master"
                             aria-label="Search"/>
                     </div>
                 </slot:template>
@@ -206,7 +206,11 @@
                             <tr>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" >&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
-                                <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">CURRENCY</th>
+                                <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CODE</th>
+                                <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER</th>
+                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">OWNER</th>
+                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">PHONE</th>
+                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">EMAIL</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
@@ -249,23 +253,17 @@
 	modal_footer={true}>
 	<slot:template slot="body">
         <div class="mb-3">
-            <label for="exampleForm" class="form-label">ID</label>
-            {#if flag_id_field == true}
-            <input bind:value={idrecord}
-                use:uperCase  
-                disabled
-                class="required form-control"
-                maxlength="4"
-                type="text"
-                placeholder="ID"/>
-            {:else}
-            <input bind:value={idrecord}
-                use:uperCase
-                class="required form-control"
-                maxlength="4"
-                type="text"
-                placeholder="ID"/>
-            {/if}
+            <label for="exampleForm" class="form-label">CODE</label>
+            <div class="input-group mb-3">
+                <input bind:value={idrecord}
+                    use:uperCase
+                    class="required form-control"
+                    maxlength="6"
+                    type="text"
+                    placeholder="CODE"/>
+                <button type="button" class="btn btn-info">Generate</button>
+              </div>
+            
         </div>
         <div class="mb-3">
             <label for="exampleForm" class="form-label">Name</label>
@@ -273,6 +271,27 @@
                 class="required"
                 type="text"
                 placeholder="Name"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Owner</label>
+            <Input bind:value={name_field}
+                class="required"
+                type="text"
+                placeholder="Owner"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Email</label>
+            <Input bind:value={name_field}
+                class=""
+                type="text"
+                placeholder="Email"/>
+        </div>
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">Phone</label>
+            <Input bind:value={name_field}
+                class="required"
+                type="text"
+                placeholder="Phone"/>
         </div>
         {#if sData != "New"}
         <div class="mb-3">

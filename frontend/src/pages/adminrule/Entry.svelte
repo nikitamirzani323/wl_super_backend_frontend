@@ -205,6 +205,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th colspan="2">MASTER MANAGEMENT</th>
                                 <th colspan="2">CATEGORY BANK MANAGEMENT</th>
                                 <th colspan="2">CURRENCY MANAGEMENT</th>
                                 <th colspan="2">DOMAIN MANAGEMENT</th>
@@ -214,6 +215,12 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="MASTER-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
@@ -249,8 +256,15 @@
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
+                                        value="MASTER-SAVE"/>
+                                </td>
+                                <td width="*">SAVE</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
                                         value="CATEBANK-SAVE"/>
                                 </td>
+                                <td width="*">SAVE</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"

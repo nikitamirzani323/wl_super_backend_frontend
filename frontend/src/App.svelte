@@ -8,6 +8,7 @@
 	import Adminrule from "./pages/adminrule/Adminrule.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
 	import Catebank from "./pages/catebank/Catebank.svelte";
+	import Master from "./pages/master/Master.svelte";
 	import Login from "./pages/Login.svelte";
 	import NotFound from "./pages/NotFound.svelte";
 	export let table_header_font;
@@ -31,6 +32,13 @@
 					table_body_font: table_body_font,
 				},
 				component: Dashboard,
+			}),
+			"/master": wrap({
+				component: Master,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
 			}),
 			"/catebank": wrap({
 				component: Catebank,

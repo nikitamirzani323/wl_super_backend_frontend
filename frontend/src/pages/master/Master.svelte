@@ -20,7 +20,7 @@
                 Authorization: "Bearer " + token,
             },
             body: JSON.stringify({
-                page: "CATEBANK-VIEW",
+                page: "MASTER-VIEW",
             }),
         });
         const json = await res.json();
@@ -34,7 +34,7 @@
         }
     }
     async function initHome() {
-        const res = await fetch("/api/catebank", {
+        const res = await fetch("/api/master", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,19 +50,17 @@
             if (record != null) {
                 totalrecord = record.length;
                 let no = 0
+                let domain_css = "";
                 for (var i = 0; i < record.length; i++) {
                     no = no + 1;
                     listHome = [
                         ...listHome,
                         {
                             home_no: no,
-                            home_id: record[i]["catebank_id"],
-                            home_name: record[i]["catebank_name"],
-                            home_status: record[i]["catebank_status"],
-                            home_status_css: record[i]["catebank_status_css"],
-                            home_list: record[i]["catebank_list"],
-                            home_create: record[i]["catebank_create"],
-                            home_update: record[i]["catebank_update"],
+                            home_id: record[i]["curr_id"],
+                            home_name: record[i]["curr_name"],
+                            home_create: record[i]["curr_create"],
+                            home_update: record[i]["curr_update"],
                         },
                     ];
                 }
