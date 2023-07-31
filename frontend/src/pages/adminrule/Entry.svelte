@@ -208,7 +208,6 @@
                                 <th colspan="2">MASTER MANAGEMENT</th>
                                 <th colspan="2">CATEGORY BANK MANAGEMENT</th>
                                 <th colspan="2">CURRENCY MANAGEMENT</th>
-                                <th colspan="2">DOMAIN MANAGEMENT</th>
                                 <th colspan="2">ADMIN MANAGEMENT</th>
                                 <th colspan="2">ADMIN RULE</th>
                             </tr>
@@ -231,12 +230,6 @@
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
                                         value="CURR-VIEW"/>
-                                </td>
-                                <td width="*">VIEW</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="DOMAIN-VIEW"/>
                                 </td>
                                 <td width="*">VIEW</td>
                                 <td width="1%">
@@ -269,12 +262,6 @@
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
                                         value="CURR-SAVE"/>
-                                </td>
-                                <td width="*">SAVE</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="DOMAIN-SAVE"/>
                                 </td>
                                 <td width="*">SAVE</td>
                                 <td width="1%">
