@@ -14,6 +14,7 @@ type responsemaster struct {
 	Status   int         `json:"status"`
 	Message  string      `json:"message"`
 	Listcurr interface{} `json:"listcurr"`
+	Listbank interface{} `json:"listbank"`
 	Record   interface{} `json:"record"`
 }
 
@@ -63,6 +64,7 @@ func Masterhome(c *fiber.Ctx) error {
 			"message":  result.Message,
 			"record":   result.Record,
 			"listcurr": result.Listcurr,
+			"listbank": result.Listbank,
 			"time":     time.Since(render_page).String(),
 		})
 	} else {
@@ -76,17 +78,20 @@ func Masterhome(c *fiber.Ctx) error {
 }
 func MasterSave(c *fiber.Ctx) error {
 	type payload_mastersave struct {
-		Page          string `json:"page"`
-		Sdata         string `json:"sdata" `
-		Master_id     string `json:"master_id" `
-		Master_idcurr string `json:"master_idcurr" `
-		Master_name   string `json:"master_name" `
-		Master_owner  string `json:"master_owner" `
-		Master_phone1 string `json:"master_phone1" `
-		Master_phone2 string `json:"master_phone2" `
-		Master_email  string `json:"master_email" `
-		Master_note   string `json:"master_note" `
-		Master_status string `json:"master_status" `
+		Page              string `json:"page"`
+		Sdata             string `json:"sdata" `
+		Master_id         string `json:"master_id" `
+		Master_idcurr     string `json:"master_idcurr" `
+		Master_name       string `json:"master_name" `
+		Master_owner      string `json:"master_owner" `
+		Master_phone1     string `json:"master_phone1" `
+		Master_phone2     string `json:"master_phone2" `
+		Master_email      string `json:"master_email" `
+		Master_note       string `json:"master_note" `
+		Master_bank_id    string `json:"master_bank_id" `
+		Master_bank_norek string `json:"master_bank_norek" `
+		Master_bank_name  string `json:"master_bank_name" `
+		Master_status     string `json:"master_status" `
 	}
 	hostname := c.Hostname()
 	bearToken := c.Get("Authorization")
@@ -110,18 +115,21 @@ func MasterSave(c *fiber.Ctx) error {
 		SetError(responseerror{}).
 		SetHeader("Content-Type", "application/json").
 		SetBody(map[string]interface{}{
-			"client_hostname": hostname,
-			"page":            client.Page,
-			"sdata":           client.Sdata,
-			"master_id":       client.Master_id,
-			"master_idcurr":   client.Master_idcurr,
-			"master_name":     client.Master_name,
-			"master_owner":    client.Master_owner,
-			"master_phone1":   client.Master_phone1,
-			"master_phone2":   client.Master_phone2,
-			"master_email":    client.Master_email,
-			"master_note":     client.Master_note,
-			"master_status":   client.Master_status,
+			"client_hostname":   hostname,
+			"page":              client.Page,
+			"sdata":             client.Sdata,
+			"master_id":         client.Master_id,
+			"master_idcurr":     client.Master_idcurr,
+			"master_name":       client.Master_name,
+			"master_owner":      client.Master_owner,
+			"master_phone1":     client.Master_phone1,
+			"master_phone2":     client.Master_phone2,
+			"master_email":      client.Master_email,
+			"master_note":       client.Master_note,
+			"master_bank_id":    client.Master_bank_id,
+			"master_bank_norek": client.Master_bank_norek,
+			"master_bank_name":  client.Master_bank_name,
+			"master_status":     client.Master_status,
 		}).
 		Post(PATH + "api/mastersave")
 	if err != nil {

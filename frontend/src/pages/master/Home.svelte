@@ -13,6 +13,7 @@
 	export let token = "";
 	export let listHome = [];
 	export let listCurr = [];
+	export let listBank = [];
 	export let totalrecord = 0;
     let dispatch = createEventDispatcher();
 	let title_page = "MASTER"
@@ -27,6 +28,9 @@
     let phone1_field = "";
     let phone2_field = "";
     let note_field = "";
+    let bank_id_field = "";
+    let bank_name_field = "";
+    let bank_norek_field = "";
     let status_field = "";
     let create_field = "";
     let update_field = "";
@@ -49,7 +53,7 @@
         }
     }
     
-    const NewData = (e,id,idcurr,name,owner,email,phone1,phone2,note,status,create,update) => {
+    const NewData = (e,id,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update) => {
         sData = e
         if(sData == "New"){
             clearField()
@@ -63,6 +67,9 @@
             phone1_field = phone1;
             phone2_field = phone2;
             note_field = note;
+            bank_id_field = idbank;
+            bank_name_field = nmownerbank;
+            bank_norek_field = norekbank;
             status_field = status;
             create_field = create;
             update_field = update;
@@ -110,6 +117,18 @@
                 flag = false
                 msg += "The Status is required\n"
             }
+            if(bank_id_field == ""){
+                flag = false
+                msg += "The Bank is required\n"
+            }
+            if(bank_name_field == ""){
+                flag = false
+                msg += "The Bank Owner is required\n"
+            }
+            if(bank_norek_field == ""){
+                flag = false
+                msg += "The Bank Number is required\n"
+            }
         }else{
             if(idrecord == ""){
                 flag = false
@@ -135,6 +154,18 @@
                 flag = false
                 msg += "The Status is required\n"
             }
+            if(bank_id_field == ""){
+                flag = false
+                msg += "The Bank is required\n"
+            }
+            if(bank_name_field == ""){
+                flag = false
+                msg += "The Bank Owner is required\n"
+            }
+            if(bank_norek_field == ""){
+                flag = false
+                msg += "The Bank Number is required\n"
+            }
         }
         
         if(flag){
@@ -158,6 +189,9 @@
                     master_phone2: phone2_field,
                     master_email: email_field,
                     master_note: note_field,
+                    master_bank_id: bank_id_field,
+                    master_bank_norek: bank_name_field,
+                    master_bank_name: bank_norek_field,
                     master_status: status_field,
                 }),
             });
@@ -194,6 +228,9 @@
         phone2_field = "";
         note_field = "";
         status_field = "";
+        bank_id_field = "";
+        bank_name_field = "";
+        bank_norek_field = "";
         flag_id_field = false
         create_field = "";
         update_field = "";
@@ -251,10 +288,9 @@
 <div id="loader" style="margin-left:50%;{css_loader}">
     {msgloader}
 </div>
-<div class="container" style="margin-top: 70px;">
+<div class="container-fluid" style="margin-top: 70px;">
     <div class="row">
         <div class="col-sm-12">
-            
             <Button
                 on:click={callFunction}
                 button_function="NEW"
@@ -284,7 +320,7 @@
                     <table class="table table-striped ">
                         <thead>
                             <tr>
-                                <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" >&nbsp;</th>
+                                <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="2">&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
                                 <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">START</th>
@@ -292,9 +328,7 @@
                                 <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CODE</th>
                                 <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CURR</th>
                                 <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER</th>
-                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">OWNER</th>
-                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">PHONE</th>
-                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">EMAIL</th>
+                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">BANK</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
@@ -303,11 +337,17 @@
                                 <tr>
                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                         <i on:click={() => {
-                                                //e,id,idcurr,name,owner,email,phone1,phone2,note,status,create,update
+                                                //e,id,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update
                                                 NewData("Edit",rec.home_id, rec.home_idcurr,
                                                 rec.home_name,rec.home_owner,rec.home_email,rec.home_phone1,rec.home_phone2,rec.home_note,rec.home_status,
+                                                rec.home_bank_id,rec.home_bank_norek,rec.home_bank_name,
                                                 rec.home_create, rec.home_update);
                                             }} class="bi bi-pencil"></i>
+                                    </td>
+                                    <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
+                                        <i on:click={() => {
+                                                NewData("New",rec.home_id, rec.home_name);
+                                            }} class="bi bi-person-plus"></i>
                                     </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_no}</td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
@@ -319,12 +359,15 @@
                                     <td nowrap style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_end}</td>
                                     <td  style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_id}</td>
                                     <td  style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_idcurr}</td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.home_name}</td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.home_owner}</td>
                                     <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
-                                        {rec.home_phone1} / {rec.home_phone2}
+                                        <b>{rec.home_name}</b><br />
+                                        OWNER : {rec.home_owner} <br />
+                                        EMAIL : {rec.home_email} <br />
+                                        PHONE : {rec.home_phone1} / {rec.home_phone2}
                                     </td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.home_email}</td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
+                                        {rec.home_bank_id} - {rec.home_bank_norek} - {rec.home_bank_name}
+                                    </td>
                                 </tr>
                             {/each}
                         </tbody>
@@ -377,7 +420,7 @@
                     <label for="exampleForm" class="form-label">Default Currency</label>
                     <select
                         bind:value="{idcurr_field}" 
-                        name="departement" id="departement" 
+                        name="currency" id="currency" 
                         class="required form-control">
                         {#each listCurr as rec}
                         <option value="{rec.curr_id}">{rec.curr_id}</option>
@@ -421,6 +464,31 @@
                 </div>
             </div>
             <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Bank</label>
+                    <select
+                        bind:value="{bank_id_field}" 
+                        name="bankid" id="bankid" 
+                        class="required form-control">
+                        {#each listBank as rec}
+                        <option value="{rec.bank_id}">{rec.bank_category} - {rec.bank_id}</option>
+                        {/each}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Nomor Rekening</label>
+                    <Input bind:value={bank_norek_field}
+                        class="required"
+                        type="text"
+                        placeholder="Bank Nomor Rekening"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Nama Bank</label>
+                    <Input bind:value={bank_name_field}
+                        class="required"
+                        type="text"
+                        placeholder="Bank Nama Pemilik Rekening"/>
+                </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Note</label>
                     <textarea style="height: 100px;resize: none;" bind:value={note_field} class="form-control"/>

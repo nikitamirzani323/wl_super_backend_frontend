@@ -9,6 +9,7 @@
     let akses_page = false;
     let listHome = [];
     let listCurr = [];
+    let listBank = [];
     let record = "";
     let record_message = "";
     let totalrecord = 0;
@@ -48,6 +49,7 @@
         if (json.status == 200) {
             record = json.record;
             let record_curr = json.listcurr;
+            let record_bank = json.listbank;
             record_message = json.message;
             if (record != null) {
                 totalrecord = record.length;
@@ -72,6 +74,9 @@
                             home_phone2: record[i]["master_phone1"],
                             home_email: record[i]["master_email"],
                             home_note: record[i]["master_note"],
+                            home_bank_id: record[i]["master_bank_id"],
+                            home_bank_norek: record[i]["master_bank_norek"],
+                            home_bank_name: record[i]["master_bank_name"],
                             home_status: record[i]["master_status"],
                             home_status_css: record[i]["master_status_css"],
                             home_create: record[i]["master_create"],
@@ -88,6 +93,15 @@
                     },
                 ];
             }
+            for (var i = 0; i < record_bank.length; i++) {
+                listBank = [
+                    ...listBank,
+                    {
+                        bank_category: record_bank[i]["catebank_name"],
+                        bank_id: record_bank[i]["banktype_id"],
+                    },
+                ];
+            }
         } else {
             logout();
         }
@@ -99,6 +113,7 @@
     const handleRefreshData = (e) => {
         listHome = [];
         listCurr = [];
+        listBank = [];
         totalrecord = 0;
         setTimeout(function () {
             initHome();
@@ -115,5 +130,6 @@
     {table_body_font}
     {listHome}
     {listCurr}
+    {listBank}
     {totalrecord}/>
 {/if}
