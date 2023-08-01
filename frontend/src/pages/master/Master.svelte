@@ -77,6 +77,7 @@
                             home_bank_id: record[i]["master_bank_id"],
                             home_bank_norek: record[i]["master_bank_norek"],
                             home_bank_name: record[i]["master_bank_name"],
+                            home_listadmin: record[i]["master_listadmin"],
                             home_status: record[i]["master_status"],
                             home_status_css: record[i]["master_status_css"],
                             home_create: record[i]["master_create"],

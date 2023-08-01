@@ -17,9 +17,10 @@
 	export let totalrecord = 0;
     let dispatch = createEventDispatcher();
 	let title_page = "MASTER"
+	let title_page_admin = "ADMIN"
     let sData = "";
+    let sDataAdmin = "";
     let myModal_newentry = "";
-    let flag_id_field = false;
     let flag_btnsave = true;
     let idcurr_field = "";
     let name_field = "";
@@ -34,7 +35,21 @@
     let status_field = "";
     let create_field = "";
     let update_field = "";
+
+
+    let admin_idmaster_field = "";
+    let admin_tipe_field = "";
+    let admin_username_field = "";
+    let admin_password_field = "";
+    let admin_name_field = "";
+    let admin_phone1_field = "";
+    let admin_phone2_field = "";
+    let admin_status_field = "";
+    let admin_create_field = "";
+    let admin_update_field = "";
+
     let idrecord = "";
+    let idrecordmasteradmin = "";
     let searchHome = "";
     let filterHome = [];
     let css_loader = "display: none;";
@@ -58,7 +73,6 @@
         if(sData == "New"){
             clearField()
         }else{
-            flag_id_field = true;
             idrecord = id
             idcurr_field = idcurr;
             name_field = name;
@@ -78,13 +92,39 @@
         myModal_newentry.show();
         
     };
+    const NewDataAdmin = (e,id,idmaster,tipe,username,name,phone1,phone2,status,create,update) => {
+        sDataAdmin = e
+        if(sDataAdmin == "New"){
+            clearField_masteradmin();
+            admin_idmaster_field = idmaster
+        }else{
+            sDataAdmin = "Edit"
+            let temp = username.split("-");
+            idrecordmasteradmin = id
+            admin_idmaster_field = temp[0]
+            admin_tipe_field = tipe;
+            admin_username_field = temp[1];
+            admin_name_field = name;
+            admin_phone1_field = phone1;
+            admin_phone2_field = phone2;
+            admin_status_field = status;
+            admin_create_field = create;
+            admin_update_field = update;
+            
+        }
+        myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud_admin"));
+        myModal_newentry.show();
+        
+    };
     const RefreshHalaman = () => {
         dispatch("handleRefreshData", "call");
     };
-    const GenerateString = (e) => {
-        idrecord = genRandomString(e)
+    const GenerateString = (y,e) => {
+        idrecord = genRandomString(y,e)
     };
-    
+    const GenerateNumber = (y,e) => {
+        admin_username_field = genRandomString(y,e)
+    };
     async function handleSave() {
         let flag = true
         let msg = ""
@@ -217,7 +257,108 @@
             alert(msg)
         }
     }
-    
+    async function handleMasterAdminSave() {
+        let flag = true
+        let msg = ""
+        if(sDataAdmin == "New"){
+            if(admin_idmaster_field == ""){
+                flag = false
+                msg += "The Code is required\n"
+            }
+            if(admin_username_field == ""){
+                flag = false
+                msg += "The Username is required\n"
+            }
+            if(admin_password_field == ""){
+                flag = false
+                msg += "The Password is required\n"
+            }
+            if(admin_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(admin_phone1_field == ""){
+                flag = false
+                msg += "The Phone is required\n"
+            }
+            if(admin_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }else{
+            if(idrecordmasteradmin == ""){
+                flag = false
+                msg += "The ID is required\n"
+            }
+            if(admin_idmaster_field == ""){
+                flag = false
+                msg += "The Code is required\n"
+            }
+            if(admin_username_field == ""){
+                flag = false
+                msg += "The Username is required\n"
+            }
+            
+            if(admin_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(admin_phone1_field == ""){
+                flag = false
+                msg += "The Phone is required\n"
+            }
+            if(admin_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }
+        
+        if(flag){
+            flag_btnsave = false;
+            css_loader = "display: inline-block;";
+            msgloader = "Sending...";
+            const res = await fetch("/api/masteradminsave", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify({
+                    sdata: sDataAdmin,
+                    page:"MASTER-SAVE",
+                    masteradmin_id: parseInt(idrecordmasteradmin),
+                    masteradmin_idmaster: admin_idmaster_field,
+                    masteradmin_tipe: admin_tipe_field,
+                    masteradmin_username: admin_idmaster_field+"-"+admin_username_field,
+                    masteradmin_password: admin_password_field,
+                    masteradmin_name: admin_name_field,
+                    masteradmin_phone1: admin_phone1_field,
+                    masteradmin_phone2: admin_phone2_field,
+                    masteradmin_status: admin_status_field,
+                }),
+            });
+            const json = await res.json();
+            if (json.status == 200) {
+                flag_btnsave = true;
+                if(sDataAdmin=="New"){
+                    clearField_masteradmin()
+                }
+                msgloader = json.message;
+                RefreshHalaman()
+            } else if(json.status == 403){
+                flag_btnsave = true;
+                alert(json.message)
+            } else {
+                flag_btnsave = true;
+                msgloader = json.message;
+            }
+            setTimeout(function () {
+                css_loader = "display: none;";
+            }, 1000);
+        }else{
+            alert(msg)
+        }
+    }
     function clearField(){
         idrecord = "";
         idcurr_field = "";
@@ -231,9 +372,19 @@
         bank_id_field = "";
         bank_name_field = "";
         bank_norek_field = "";
-        flag_id_field = false
         create_field = "";
         update_field = "";
+    }
+    function clearField_masteradmin(){
+        admin_tipe_field = "";
+        admin_username_field = "";
+        admin_password_field = "";
+        admin_name_field = "";
+        admin_phone1_field = "";
+        admin_phone2_field = "";
+        admin_status_field = "";
+        admin_create_field = "";
+        admin_update_field = "";
     }
     function callFunction(event){
         switch(event.detail){
@@ -275,11 +426,19 @@
             },
         };
     }
-    function genRandomString(length) {
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var charLength = chars.length;
-        var result = '';
-        for ( var i = 0; i < length; i++ ) {
+    function genRandomString(tipe,length) {
+        let chars = '';
+        switch(tipe){
+            case "UPPERCASE":
+                chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';break;
+            case "LOWERCASE":
+                chars = 'abcdefghijklmnopqrstuvwxyz';break;
+            case "NUMBER":
+                chars = '0123456789';break;
+        }
+        let charLength = chars.length;
+        let result = '';
+        for ( let i = 0; i < length; i++ ) {
             result += chars.charAt(Math.floor(Math.random() * charLength));
         }
         return result;
@@ -291,13 +450,11 @@
 <div class="container-fluid" style="margin-top: 70px;">
     <div class="row">
         <div class="col-sm-12">
-            <Button
-                on:click={callFunction}
+            <Button on:click={callFunction}
                 button_function="NEW"
                 button_title="New"
                 button_css="btn-dark"/>
-            <Button
-                on:click={callFunction}
+            <Button on:click={callFunction}
                 button_function="REFRESH"
                 button_title="Refresh"
                 button_css="btn-primary"/>
@@ -323,12 +480,14 @@
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="2">&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
-                                <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">START</th>
-                                <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">END</th>
-                                <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CODE</th>
-                                <th NOWRAP width="5%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CURR</th>
+                                <th NOWRAP width="7%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">START</th>
+                                <th NOWRAP width="7%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">END</th>
+                                <th NOWRAP width="3%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CODE</th>
+                                <th NOWRAP width="3%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CURR</th>
                                 <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER</th>
-                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">BANK</th>
+                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER ADMIN</th>
+                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN</th>
+                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN ADMIN</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
@@ -337,7 +496,6 @@
                                 <tr>
                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                         <i on:click={() => {
-                                                //e,id,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update
                                                 NewData("Edit",rec.home_id, rec.home_idcurr,
                                                 rec.home_name,rec.home_owner,rec.home_email,rec.home_phone1,rec.home_phone2,rec.home_note,rec.home_status,
                                                 rec.home_bank_id,rec.home_bank_norek,rec.home_bank_name,
@@ -346,7 +504,7 @@
                                     </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                         <i on:click={() => {
-                                                NewData("New",rec.home_id, rec.home_name);
+                                                NewDataAdmin("New",idrecordmasteradmin,rec.home_id);
                                             }} class="bi bi-person-plus"></i>
                                     </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_no}</td>
@@ -359,15 +517,52 @@
                                     <td nowrap style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_end}</td>
                                     <td  style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_id}</td>
                                     <td  style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_idcurr}</td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
+                                    <td  NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">
                                         <b>{rec.home_name}</b><br />
                                         OWNER : {rec.home_owner} <br />
                                         EMAIL : {rec.home_email} <br />
-                                        PHONE : {rec.home_phone1} / {rec.home_phone2}
-                                    </td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
+                                        PHONE : {rec.home_phone1} / {rec.home_phone2}<br />
                                         {rec.home_bank_id} - {rec.home_bank_norek} - {rec.home_bank_name}
                                     </td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
+                                        <table class="table table-striped-columns">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
+                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">TIPE</th>
+                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">USERNAME</th>
+                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {#each rec.home_listadmin as rec2}
+                                                <tr>
+                                                    <td NOWRAP  style="text-align: center;vertical-align: top;font-size: 11px;">
+                                                        <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec2.masteradmin_status_css}">
+                                                            {status(rec2.masteradmin_status)}
+                                                        </span>
+                                                    </td>
+                                                    <td NOWRAP  style="text-align: left;vertical-align: top;font-size: 11px;">{rec2.masteradmin_tipe}</td>
+                                                    <td NOWRAP  style="text-align: left;vertical-align: top;font-size: 11px;">
+                                                        <span
+                                                            on:click={() => {
+                                                                //e,id,idmaster,tipe,username,name,phone1,phone2,status,create,update
+                                                                NewDataAdmin("Edit",rec2.masteradmin_id,rec2.masteradmin_idmaster,
+                                                                rec2.masteradmin_tipe,rec2.masteradmin_username,rec2.masteradmin_name,
+                                                                rec2.masteradmin_phone1,rec2.masteradmin_phone2,rec2.masteradmin_status,
+                                                                rec2.masteradmin_create,rec2.masteradmin_update);
+                                                            }} 
+                                                            style="cursor: pointer;text-decoration:underline;">{rec2.masteradmin_username}</span>
+                                                    </td>
+                                                    <td NOWRAP  style="text-align: left;vertical-align: top;font-size: 11px;">{rec2.masteradmin_name}</td>
+                                                </tr>
+                                                {/each}
+                                            </tbody>
+                                        </table>
+                                        
+                                    </td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};"></td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};"></td>
                                 </tr>
                             {/each}
                         </tbody>
@@ -410,7 +605,7 @@
                             placeholder="CODE"/>
                         {#if sData != "Edit"}
                         <button on:click={() => {
-                                GenerateString(4);
+                                GenerateString("UPPERCASE",4);
                             }}
                             type="button" class="btn btn-info">Generate</button>
                         {/if}
@@ -526,4 +721,104 @@
 </Modal>
 
 
-
+<Modal
+	modal_id="modalentrycrud_admin"
+	modal_size="modal-dialog-centered modal-lg"
+	modal_title="MASTER {title_page_admin+"/"+sDataAdmin}"
+    modal_footer_css="padding:5px;"
+	modal_footer={true}>
+	<slot:template slot="body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Tipe</label>
+                    <select
+                        bind:value="{admin_tipe_field}" 
+                        name="currency" id="Tipe" 
+                        class="required form-control">
+                        <option value="MASTER">MASTER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">username</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">{admin_idmaster_field}</span>
+                        <input bind:value={admin_username_field}
+                            use:uperCase
+                            class="required form-control"
+                            maxlength="5"
+                            disabled
+                            type="text"
+                            placeholder="CODE"/>
+                        {#if sDataAdmin != "Edit"}
+                        <button on:click={() => {
+                                GenerateNumber("NUMBER",5);
+                            }}
+                            type="button" class="btn btn-info">Generate</button>
+                        {/if}
+                      </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Password</label>
+                    <input
+                        bind:value={admin_password_field}
+                        type="password"
+                        class="form-control "
+                        placeholder="Password"
+                        aria-label="Password"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Name</label>
+                    <Input bind:value={admin_name_field}
+                        class="required"
+                        type="text"
+                        placeholder="Name"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 1</label>
+                    <Input bind:value={admin_phone1_field}
+                        class="required"
+                        type="text"
+                        placeholder="Phone 1"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 2</label>
+                    <Input bind:value={admin_phone2_field}
+                        class=""
+                        type="text"
+                        placeholder="Phone 2"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Status</label>
+                    <select
+                        class="form-control required"
+                        bind:value={admin_status_field}>
+                        <option value="Y">ACTIVE</option>
+                        <option value="N">DEACTIVE</option>
+                    </select>
+                </div>
+                {#if sData != "New"}
+                    <div class="mb-3">
+                        <div class="alert alert-secondary" style="font-size: 11px; padding:10px;" role="alert">
+                            Create : {admin_create_field}<br />
+                            Update : {admin_update_field}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+	</slot:template>
+	<slot:template slot="footer">
+        {#if flag_btnsave}
+        <Button on:click={() => {
+                handleMasterAdminSave();
+            }} 
+            button_function="SAVE"
+            button_title="Save"
+            button_css="btn-warning"/>
+        {/if}
+	</slot:template>
+</Modal>
