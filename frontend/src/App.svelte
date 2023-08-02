@@ -6,8 +6,10 @@
 	
 	import Admin from "./pages/admin/Admin.svelte";
 	import Adminrule from "./pages/adminrule/Adminrule.svelte";
+	import Provider from "./pages/provider/Provider.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
 	import Catebank from "./pages/catebank/Catebank.svelte";
+	import Categame from "./pages/categame/Categame.svelte";
 	import Master from "./pages/master/Master.svelte";
 	import Login from "./pages/Login.svelte";
 	import NotFound from "./pages/NotFound.svelte";
@@ -32,6 +34,20 @@
 					table_body_font: table_body_font,
 				},
 				component: Dashboard,
+			}),
+			"/categame": wrap({
+				component: Categame,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
+			}),
+			"/provider": wrap({
+				component: Provider,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
 			}),
 			"/master": wrap({
 				component: Master,

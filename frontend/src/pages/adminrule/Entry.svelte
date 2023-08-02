@@ -205,15 +205,34 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th colspan="2">GAME MANAGEMENT</th>
+                                <th colspan="2">PROVIDER MANAGEMENT</th>
+                                <th colspan="2">CATEGORY GAME MANAGEMENT</th>
                                 <th colspan="2">MASTER MANAGEMENT</th>
                                 <th colspan="2">CATEGORY BANK MANAGEMENT</th>
                                 <th colspan="2">CURRENCY MANAGEMENT</th>
-                                <th colspan="2">ADMIN MANAGEMENT</th>
-                                <th colspan="2">ADMIN RULE</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="GAME-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="PROVIDER-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="CATEGAME-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
@@ -232,20 +251,25 @@
                                         value="CURR-VIEW"/>
                                 </td>
                                 <td width="*">VIEW</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMIN-VIEW"/>
-                                </td>
-                                <td width="*">VIEW</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMINRULE-VIEW"/>
-                                </td>
-                                <td width="*">VIEW</td>
-                            </tr>
                             <tr>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="GAME-SAVE"/>
+                                </td>
+                                <td width="*">SAVE</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="PROVIDER-SAVE"/>
+                                </td>
+                                <td width="*">SAVE</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="CATEGAME-SAVE"/>
+                                </td>
+                                <td width="*">SAVE</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
@@ -264,6 +288,33 @@
                                         value="CURR-SAVE"/>
                                 </td>
                                 <td width="*">SAVE</td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">ADMIN MANAGEMENT</th>
+                                <th colspan="2">ADMIN RULE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="ADMIN-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
+                                <td width="1%">
+                                    <input bind:group={adminrule_rule_field}
+                                        type="checkbox"
+                                        value="ADMINRULE-VIEW"/>
+                                </td>
+                                <td width="*">VIEW</td>
+                            </tr>
+                            <tr>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
