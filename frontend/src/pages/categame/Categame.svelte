@@ -8,6 +8,7 @@
     let token = localStorage.getItem("token");
     let akses_page = false;
     let listHome = [];
+    let listProvider = [];
     let record = "";
     let record_message = "";
     let totalrecord = 0;
@@ -47,10 +48,10 @@
         if (json.status == 200) {
             record = json.record;
             record_message = json.message;
+            let record_listprovider = json.listprovider;
             if (record != null) {
                 totalrecord = record.length;
                 let no = 0
-                let domain_css = "";
                 for (var i = 0; i < record.length; i++) {
                     no = no + 1;
                     listHome = [
@@ -59,10 +60,20 @@
                             home_no: no,
                             home_id: record[i]["categame_id"],
                             home_name: record[i]["categame_name"],
+                            home_list: record[i]["categame_list"],
                             home_status: record[i]["categame_status"],
                             home_status_css: record[i]["categame_status_css"],
                             home_create: record[i]["categame_create"],
                             home_update: record[i]["categame_update"],
+                        },
+                    ];
+                }
+                for (var i = 0; i < record_listprovider.length; i++) {
+                    listProvider = [
+                        ...listProvider,
+                        {
+                            provider_id: record_listprovider[i]["provider_id"],
+                            provider_name: record_listprovider[i]["provider_name"],
                         },
                     ];
                 }
@@ -92,5 +103,6 @@
     {table_header_font}
     {table_body_font}
     {listHome}
+    {listProvider}
     {totalrecord}/>
 {/if}
