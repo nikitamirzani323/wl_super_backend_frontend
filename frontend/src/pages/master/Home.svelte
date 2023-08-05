@@ -18,8 +18,10 @@
     let dispatch = createEventDispatcher();
 	let title_page = "MASTER"
 	let title_page_admin = "ADMIN"
+	let title_page_agen = ""
     let sData = "";
     let sDataAdmin = "";
+    let sDataAgen = "";
     let myModal_newentry = "";
     let flag_btnsave = true;
     let idcurr_field = "";
@@ -48,8 +50,25 @@
     let admin_create_field = "";
     let admin_update_field = "";
 
+    let agen_idmaster_field = "";
+    let agen_idcurr_field = "";
+    let agen_name_field = "";
+    let agen_owner_field = "";
+    let agen_email_field = "";
+    let agen_phone1_field = "";
+    let agen_phone2_field = "";
+    let agen_note_field = "";
+    let agen_bank_id_field = "";
+    let agen_bank_name_field = "";
+    let agen_bank_norek_field = "";
+    let agen_status_field = "";
+    let agen_create_field = "";
+    let agen_update_field = "";
+
+
     let idrecord = "";
     let idrecordmasteradmin = "";
+    let idrecordmasteragen = "";
     let searchHome = "";
     let filterHome = [];
     let css_loader = "display: none;";
@@ -116,24 +135,29 @@
         myModal_newentry.show();
         
     };
-    const NewDataAgen = (e,id,idmaster,tipe,username,name,phone1,phone2,status,create,update) => {
-        sDataAdmin = e
-        if(sDataAdmin == "New"){
-            clearField_masteradmin();
+    const NewDataAgen = (e,id,idmaster,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update) => {
+        sDataAgen = e
+        title_page_agen = "MASTER - " + idmaster
+        if(sDataAgen == "New"){
+            clearField_masteragen();
             admin_idmaster_field = idmaster
         }else{
-            sDataAdmin = "Edit"
-            let temp = username.split("-");
+            sDataAgen = "Edit"
             idrecordmasteradmin = id
-            admin_idmaster_field = temp[0]
-            admin_tipe_field = tipe;
-            admin_username_field = temp[1];
-            admin_name_field = name;
-            admin_phone1_field = phone1;
-            admin_phone2_field = phone2;
-            admin_status_field = status;
-            admin_create_field = create;
-            admin_update_field = update;
+            agen_idmaster_field = idmaster;
+            agen_idcurr_field = idcurr;
+            agen_name_field = name;
+            agen_owner_field = owner;
+            agen_email_field = email;
+            agen_phone1_field = phone1;
+            agen_phone2_field = phone2;
+            agen_note_field = note;
+            agen_bank_id_field = idbank;
+            agen_bank_name_field = nmownerbank;
+            agen_bank_norek_field = norekbank;
+            agen_status_field = status;
+            agen_create_field = create;
+            agen_update_field = update;
             
         }
         myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud_agen"));
@@ -383,6 +407,139 @@
             alert(msg)
         }
     }
+    async function handleAgenSave() {
+        let flag = true
+        let msg = ""
+        if(sDataAgen == "New"){
+            if(agen_idmaster_field == ""){
+                flag = false
+                msg += "The Master is required\n"
+            }
+            if(agen_idcurr_field == ""){
+                flag = false
+                msg += "The Default Curreny is required\n"
+            }
+            if(agen_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(agen_owner_field == ""){
+                flag = false
+                msg += "The Owner is required\n"
+            }
+            if(agen_phone1_field == ""){
+                flag = false
+                msg += "The Phone 1 is required\n"
+            }
+            if(agen_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+            if(agen_bank_id_field == ""){
+                flag = false
+                msg += "The Bank is required\n"
+            }
+            if(agen_bank_name_field == ""){
+                flag = false
+                msg += "The Bank Owner is required\n"
+            }
+            if(agen_bank_norek_field == ""){
+                flag = false
+                msg += "The Bank Number is required\n"
+            }
+        }else{
+            if(idrecordmasteragen == ""){
+                flag = false
+                msg += "The ID is required\n"
+            }
+            if(agen_idmaster_field == ""){
+                flag = false
+                msg += "The Master is required\n"
+            }
+            if(agen_idcurr_field == ""){
+                flag = false
+                msg += "The Default Curreny is required\n"
+            }
+            if(agen_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(agen_owner_field == ""){
+                flag = false
+                msg += "The Owner is required\n"
+            }
+            if(agen_phone1_field == ""){
+                flag = false
+                msg += "The Phone 1 is required\n"
+            }
+            if(agen_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+            if(agen_bank_id_field == ""){
+                flag = false
+                msg += "The Bank is required\n"
+            }
+            if(agen_bank_name_field == ""){
+                flag = false
+                msg += "The Bank Owner is required\n"
+            }
+            if(agen_bank_norek_field == ""){
+                flag = false
+                msg += "The Bank Number is required\n"
+            }
+        }
+        
+        if(flag){
+            flag_btnsave = false;
+            css_loader = "display: inline-block;";
+            msgloader = "Sending...";
+            const res = await fetch("/api/masteragensave", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify({
+                    sdata: sData,
+                    page:"MASTER-SAVE",
+                    masteragen_id: idrecordmasteragen,
+                    masteragen_idmaster: agen_idmaster_field,
+                    masteragen_idcurr: agen_idcurr_field,
+                    masteragen_name: agen_name_field,
+                    masteragen_owner: agen_owner_field,
+                    masteragen_phone1: agen_phone1_field,
+                    masteragen_phone2: agen_phone2_field,
+                    masteragen_email: agen_email_field,
+                    masteragen_note: agen_note_field,
+                    masteragen_bank_id: agen_bank_id_field,
+                    masteragen_bank_norek: agen_bank_norek_field,
+                    masteragen_bank_name: agen_bank_name_field,
+                    masteragen_status: agen_status_field,
+                }),
+            });
+            const json = await res.json();
+            if (json.status == 200) {
+                flag_btnsave = true;
+                if(sDataAgen=="New"){
+                    clearField_masteragen()
+                }
+                msgloader = json.message;
+                RefreshHalaman()
+            } else if(json.status == 403){
+                flag_btnsave = true;
+                alert(json.message)
+            } else {
+                flag_btnsave = true;
+                msgloader = json.message;
+            }
+            setTimeout(function () {
+                css_loader = "display: none;";
+            }, 1000);
+        }else{
+            alert(msg)
+        }
+    }
     function clearField(){
         idrecord = "";
         idcurr_field = "";
@@ -409,6 +566,22 @@
         admin_status_field = "";
         admin_create_field = "";
         admin_update_field = "";
+    }
+    function clearField_masteragen(){
+        agen_idmaster_field = "";
+        agen_idcurr_field = "";
+        agen_name_field = "";
+        agen_owner_field = "";
+        agen_email_field = "";
+        agen_phone1_field = "";
+        agen_phone2_field = "";
+        agen_note_field = "";
+        agen_bank_id_field = "";
+        agen_bank_name_field = "";
+        agen_bank_norek_field = "";
+        agen_status_field = "";
+        agen_create_field = "";
+        agen_update_field = "";
     }
     function callFunction(event){
         switch(event.detail){
@@ -531,7 +704,8 @@
                                     </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                         <i on:click={() => {
-                                                NewDataAgen("New",idrecordmasteradmin,rec.home_id);
+                                                //e,id,idmaster,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update
+                                                NewDataAgen("New",idrecordmasteragen,rec.home_id,rec.home_idcurr);
                                             }} class="bi bi-database-add"></i>
                                     </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_no}</td>
@@ -855,34 +1029,16 @@
 <Modal
 	modal_id="modalentrycrud_agen"
 	modal_size="modal-dialog-centered modal-lg"
-	modal_title="{title_page+"/"+sData}"
+	modal_title="{title_page_agen+"/"+sDataAgen}"
     modal_footer_css="padding:5px;"
 	modal_footer={true}>
 	<slot:template slot="body">
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label for="exampleForm" class="form-label">CODE</label>
-                    <div class="input-group mb-3">
-                        <input bind:value={idrecord}
-                            use:uperCase
-                            class="required form-control"
-                            maxlength="3"
-                            disabled
-                            type="text"
-                            placeholder="CODE"/>
-                        {#if sData != "Edit"}
-                        <button on:click={() => {
-                                GenerateString("UPPERCASE",4);
-                            }}
-                            type="button" class="btn btn-info">Generate</button>
-                        {/if}
-                      </div>
-                </div>
-                <div class="mb-3">
                     <label for="exampleForm" class="form-label">Default Currency</label>
                     <select
-                        bind:value="{idcurr_field}" 
+                        bind:value="{agen_idcurr_field}" 
                         name="currency" id="currency" 
                         class="required form-control">
                         {#each listCurr as rec}
@@ -892,35 +1048,35 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Name</label>
-                    <Input bind:value={name_field}
+                    <Input bind:value={agen_name_field}
                         class="required"
                         type="text"
                         placeholder="Name"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Owner</label>
-                    <Input bind:value={owner_field}
+                    <Input bind:value={agen_owner_field}
                         class="required"
                         type="text"
                         placeholder="Owner"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Email</label>
-                    <Input bind:value={email_field}
+                    <Input bind:value={agen_email_field}
                         class=""
                         type="text"
                         placeholder="Email"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Phone 1</label>
-                    <Input bind:value={phone1_field}
+                    <Input bind:value={agen_phone1_field}
                         class="required"
                         type="text"
                         placeholder="Phone 1"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Phone 2</label>
-                    <Input bind:value={phone2_field}
+                    <Input bind:value={agen_phone2_field}
                         class=""
                         type="text"
                         placeholder="Phone 2"/>
@@ -930,7 +1086,7 @@
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Bank</label>
                     <select
-                        bind:value="{bank_id_field}" 
+                        bind:value="{agen_bank_id_field}" 
                         name="bankid" id="bankid" 
                         class="required form-control">
                         {#each listBank as rec}
@@ -940,27 +1096,27 @@
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Nomor Rekening</label>
-                    <Input bind:value={bank_norek_field}
+                    <Input bind:value={agen_bank_norek_field}
                         class="required"
                         type="text"
                         placeholder="Bank Nomor Rekening"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Nama Bank</label>
-                    <Input bind:value={bank_name_field}
+                    <Input bind:value={agen_bank_name_field}
                         class="required"
                         type="text"
                         placeholder="Bank Nama Pemilik Rekening"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Note</label>
-                    <textarea style="height: 100px;resize: none;" bind:value={note_field} class="form-control"/>
+                    <textarea style="height: 100px;resize: none;" bind:value={agen_note_field} class="form-control"/>
                 </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">Status</label>
                     <select
                         class="form-control required"
-                        bind:value={status_field}>
+                        bind:value={agen_status_field}>
                         <option value="Y">ACTIVE</option>
                         <option value="N">DEACTIVE</option>
                     </select>
@@ -968,8 +1124,8 @@
                 {#if sData != "New"}
                     <div class="mb-3">
                         <div class="alert alert-secondary" style="font-size: 11px; padding:10px;" role="alert">
-                            Create : {create_field}<br />
-                            Update : {update_field}
+                            Create : {agen_create_field}<br />
+                            Update : {agen_update_field}
                         </div>
                     </div>
                 {/if}
@@ -979,7 +1135,7 @@
 	<slot:template slot="footer">
         {#if flag_btnsave}
         <Button on:click={() => {
-                handleSave();
+                handleAgenSave();
             }} 
             button_function="SAVE"
             button_title="Save"
