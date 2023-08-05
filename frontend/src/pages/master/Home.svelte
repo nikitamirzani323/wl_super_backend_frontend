@@ -116,6 +116,30 @@
         myModal_newentry.show();
         
     };
+    const NewDataAgen = (e,id,idmaster,tipe,username,name,phone1,phone2,status,create,update) => {
+        sDataAdmin = e
+        if(sDataAdmin == "New"){
+            clearField_masteradmin();
+            admin_idmaster_field = idmaster
+        }else{
+            sDataAdmin = "Edit"
+            let temp = username.split("-");
+            idrecordmasteradmin = id
+            admin_idmaster_field = temp[0]
+            admin_tipe_field = tipe;
+            admin_username_field = temp[1];
+            admin_name_field = name;
+            admin_phone1_field = phone1;
+            admin_phone2_field = phone2;
+            admin_status_field = status;
+            admin_create_field = create;
+            admin_update_field = update;
+            
+        }
+        myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud_agen"));
+        myModal_newentry.show();
+        
+    };
     const RefreshHalaman = () => {
         dispatch("handleRefreshData", "call");
     };
@@ -477,7 +501,7 @@
                     <table class="table table-striped ">
                         <thead>
                             <tr>
-                                <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="2">&nbsp;</th>
+                                <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="3">&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
                                 <th NOWRAP width="7%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">START</th>
@@ -485,9 +509,7 @@
                                 <th NOWRAP width="3%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CODE</th>
                                 <th NOWRAP width="3%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">CURR</th>
                                 <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER</th>
-                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">MASTER ADMIN</th>
-                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN</th>
-                                <th NOWRAP width="20%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN ADMIN</th>
+                                <th NOWRAP width="35%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
@@ -507,6 +529,11 @@
                                                 NewDataAdmin("New",idrecordmasteradmin,rec.home_id);
                                             }} class="bi bi-person-plus"></i>
                                     </td>
+                                    <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
+                                        <i on:click={() => {
+                                                NewDataAgen("New",idrecordmasteradmin,rec.home_id);
+                                            }} class="bi bi-database-add"></i>
+                                    </td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.home_no}</td>
                                     <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
                                         <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec.home_status_css}">
@@ -523,15 +550,17 @@
                                         EMAIL : {rec.home_email} <br />
                                         PHONE : {rec.home_phone1} / {rec.home_phone2}<br />
                                         {rec.home_bank_id} - {rec.home_bank_norek} - {rec.home_bank_name}
-                                    </td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
-                                        <table class="table table-striped-columns">
+                                        <br />
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
-                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">TIPE</th>
-                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">USERNAME</th>
-                                                    <th style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
+                                                    <th style="text-align: center;vertical-align: top;font-size: 11px;" colspan=4>ADMIN</th>
+                                                </tr>
+                                                <tr>
+                                                    <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
+                                                    <th NOWRAP width="3%" style="text-align: left;vertical-align: top;font-size: 11px;">TIPE</th>
+                                                    <th NOWRAP width="10%" style="text-align: left;vertical-align: top;font-size: 11px;">USERNAME</th>
+                                                    <th width="*" style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -559,10 +588,10 @@
                                                 {/each}
                                             </tbody>
                                         </table>
-                                        
                                     </td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};"></td>
-                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};"></td>
+                                    <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
+                                        <button type="button" class="btn btn-info">New Agen</button>
+                                    </td>
                                 </tr>
                             {/each}
                         </tbody>
@@ -815,6 +844,142 @@
         {#if flag_btnsave}
         <Button on:click={() => {
                 handleMasterAdminSave();
+            }} 
+            button_function="SAVE"
+            button_title="Save"
+            button_css="btn-warning"/>
+        {/if}
+	</slot:template>
+</Modal>
+
+<Modal
+	modal_id="modalentrycrud_agen"
+	modal_size="modal-dialog-centered modal-lg"
+	modal_title="{title_page+"/"+sData}"
+    modal_footer_css="padding:5px;"
+	modal_footer={true}>
+	<slot:template slot="body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">CODE</label>
+                    <div class="input-group mb-3">
+                        <input bind:value={idrecord}
+                            use:uperCase
+                            class="required form-control"
+                            maxlength="3"
+                            disabled
+                            type="text"
+                            placeholder="CODE"/>
+                        {#if sData != "Edit"}
+                        <button on:click={() => {
+                                GenerateString("UPPERCASE",4);
+                            }}
+                            type="button" class="btn btn-info">Generate</button>
+                        {/if}
+                      </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Default Currency</label>
+                    <select
+                        bind:value="{idcurr_field}" 
+                        name="currency" id="currency" 
+                        class="required form-control">
+                        {#each listCurr as rec}
+                        <option value="{rec.curr_id}">{rec.curr_id}</option>
+                        {/each}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Name</label>
+                    <Input bind:value={name_field}
+                        class="required"
+                        type="text"
+                        placeholder="Name"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Owner</label>
+                    <Input bind:value={owner_field}
+                        class="required"
+                        type="text"
+                        placeholder="Owner"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Email</label>
+                    <Input bind:value={email_field}
+                        class=""
+                        type="text"
+                        placeholder="Email"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 1</label>
+                    <Input bind:value={phone1_field}
+                        class="required"
+                        type="text"
+                        placeholder="Phone 1"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 2</label>
+                    <Input bind:value={phone2_field}
+                        class=""
+                        type="text"
+                        placeholder="Phone 2"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Bank</label>
+                    <select
+                        bind:value="{bank_id_field}" 
+                        name="bankid" id="bankid" 
+                        class="required form-control">
+                        {#each listBank as rec}
+                        <option value="{rec.bank_id}">{rec.bank_category} - {rec.bank_id}</option>
+                        {/each}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Nomor Rekening</label>
+                    <Input bind:value={bank_norek_field}
+                        class="required"
+                        type="text"
+                        placeholder="Bank Nomor Rekening"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Nama Bank</label>
+                    <Input bind:value={bank_name_field}
+                        class="required"
+                        type="text"
+                        placeholder="Bank Nama Pemilik Rekening"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Note</label>
+                    <textarea style="height: 100px;resize: none;" bind:value={note_field} class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Status</label>
+                    <select
+                        class="form-control required"
+                        bind:value={status_field}>
+                        <option value="Y">ACTIVE</option>
+                        <option value="N">DEACTIVE</option>
+                    </select>
+                </div>
+                {#if sData != "New"}
+                    <div class="mb-3">
+                        <div class="alert alert-secondary" style="font-size: 11px; padding:10px;" role="alert">
+                            Create : {create_field}<br />
+                            Update : {update_field}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+	</slot:template>
+	<slot:template slot="footer">
+        {#if flag_btnsave}
+        <Button on:click={() => {
+                handleSave();
             }} 
             button_function="SAVE"
             button_title="Save"

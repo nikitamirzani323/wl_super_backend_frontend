@@ -240,3 +240,90 @@ func MasteradminSave(c *fiber.Ctx) error {
 		})
 	}
 }
+func MasteragenSave(c *fiber.Ctx) error {
+	type payload_masteragensave struct {
+		Page                  string `json:"page"`
+		Sdata                 string `json:"sdata" `
+		Masteragen_id         int    `json:"masteragen_id" `
+		Masteragen_idmaster   string `json:"masteragen_idmaster" `
+		Masteragen_idcurr     string `json:"masteragen_idcurr" `
+		Masteragen_name       string `json:"masteragen_name" `
+		Masteragen_owner      string `json:"masteragen_owner" `
+		Masteragen_phone1     string `json:"masteragen_phone1" `
+		Masteragen_phone2     string `json:"masteragen_phone2" `
+		Masteragen_email      string `json:"masteragen_email" `
+		Masteragen_note       string `json:"masteragen_note" `
+		Masteragen_bank_id    string `json:"masteragen_bank_id" `
+		Masteragen_bank_norek string `json:"masteragen_bank_norek" `
+		Masteragen_bank_name  string `json:"masteragen_bank_name" `
+		Masteragen_status     string `json:"masteragen_status" `
+	}
+	hostname := c.Hostname()
+	bearToken := c.Get("Authorization")
+	token := strings.Split(bearToken, " ")
+	client := new(payload_masteragensave)
+	if err := c.BodyParser(client); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": err.Error(),
+			"record":  nil,
+		})
+	}
+
+	log.Println("Hostname: ", hostname)
+	render_page := time.Now()
+	axios := resty.New()
+	resp, err := axios.R().
+		SetResult(responsedefault{}).
+		SetAuthToken(token[1]).
+		SetError(responseerror{}).
+		SetHeader("Content-Type", "application/json").
+		SetBody(map[string]interface{}{
+			"client_hostname":       hostname,
+			"page":                  client.Page,
+			"sdata":                 client.Sdata,
+			"masteragen_id":         client.Masteragen_id,
+			"masteragen_idmaster":   client.Masteragen_idmaster,
+			"masteragen_idcurr":     client.Masteragen_idcurr,
+			"masteragen_name":       client.Masteragen_name,
+			"masteragen_owner":      client.Masteragen_owner,
+			"masteragen_phone1":     client.Masteragen_phone1,
+			"masteragen_phone2":     client.Masteragen_phone2,
+			"masteragen_email":      client.Masteragen_email,
+			"masteragen_note":       client.Masteragen_note,
+			"masteragen_bank_id":    client.Masteragen_bank_id,
+			"masteragen_bank_norek": client.Masteragen_bank_norek,
+			"masteragen_bank_name":  client.Masteragen_bank_name,
+			"masteragen_status":     client.Masteragen_status,
+		}).
+		Post(PATH + "api/masteragensave")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println("Response Info:")
+	log.Println("  Error      :", err)
+	log.Println("  Status Code:", resp.StatusCode())
+	log.Println("  Status     :", resp.Status())
+	log.Println("  Proto      :", resp.Proto())
+	log.Println("  Time       :", resp.Time())
+	log.Println("  Received At:", resp.ReceivedAt())
+	log.Println("  Body       :\n", resp)
+	log.Println()
+	result := resp.Result().(*responsedefault)
+	if result.Status == 200 {
+		return c.JSON(fiber.Map{
+			"status":  result.Status,
+			"message": result.Message,
+			"record":  result.Record,
+			"time":    time.Since(render_page).String(),
+		})
+	} else {
+		result_error := resp.Error().(*responseerror)
+		return c.JSON(fiber.Map{
+			"status":  result_error.Status,
+			"message": result_error.Message,
+			"time":    time.Since(render_page).String(),
+		})
+	}
+}
