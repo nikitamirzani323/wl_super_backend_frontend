@@ -767,9 +767,7 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th style="text-align: center;vertical-align: top;font-size: 11px;" colspan=4>AGEN</th>
-                                                </tr>
-                                                <tr>
+                                                    <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="1">&nbsp;</th>
                                                     <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
                                                     <th width="3%" style="text-align: left;vertical-align: top;font-size: 11px;">CODE</th>
                                                     <th width="*" style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
@@ -778,6 +776,11 @@
                                             <tbody>
                                                 {#each rec.home_listagen as rec2}
                                                 <tr>
+                                                    <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
+                                                        <i on:click={() => {
+                                                                NewDataAdmin("New",idrecordmasteradmin,rec.home_id);
+                                                            }} class="bi bi-person-plus"></i>
+                                                    </td>
                                                     <td NOWRAP  style="text-align: center;vertical-align: top;font-size: 11px;">
                                                         <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec2.masteragen_status_css}">
                                                             {status(rec2.masteragen_status)}
