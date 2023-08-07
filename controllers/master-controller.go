@@ -244,7 +244,7 @@ func MasteragenSave(c *fiber.Ctx) error {
 	type payload_masteragensave struct {
 		Page                  string `json:"page"`
 		Sdata                 string `json:"sdata" `
-		Masteragen_id         int    `json:"masteragen_id" `
+		Masteragen_id         string `json:"masteragen_id" `
 		Masteragen_idmaster   string `json:"masteragen_idmaster" `
 		Masteragen_idcurr     string `json:"masteragen_idcurr" `
 		Masteragen_name       string `json:"masteragen_name" `

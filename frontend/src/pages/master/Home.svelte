@@ -140,10 +140,10 @@
         title_page_agen = "MASTER - " + idmaster
         if(sDataAgen == "New"){
             clearField_masteragen();
-            admin_idmaster_field = idmaster
+            agen_idmaster_field = idmaster
         }else{
             sDataAgen = "Edit"
-            idrecordmasteradmin = id
+            idrecordmasteragen = id
             agen_idmaster_field = idmaster;
             agen_idcurr_field = idcurr;
             agen_name_field = name;
@@ -501,7 +501,7 @@
                     Authorization: "Bearer " + token,
                 },
                 body: JSON.stringify({
-                    sdata: sData,
+                    sdata: sDataAgen,
                     page:"MASTER-SAVE",
                     masteragen_id: idrecordmasteragen,
                     masteragen_idmaster: agen_idmaster_field,
@@ -764,7 +764,43 @@
                                         </table>
                                     </td>
                                     <td  style="text-align: left;vertical-align: top;font-size: {table_body_font};">
-                                        <button type="button" class="btn btn-info">New Agen</button>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center;vertical-align: top;font-size: 11px;" colspan=4>AGEN</th>
+                                                </tr>
+                                                <tr>
+                                                    <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
+                                                    <th width="3%" style="text-align: left;vertical-align: top;font-size: 11px;">CODE</th>
+                                                    <th width="*" style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {#each rec.home_listagen as rec2}
+                                                <tr>
+                                                    <td NOWRAP  style="text-align: center;vertical-align: top;font-size: 11px;">
+                                                        <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec2.masteragen_status_css}">
+                                                            {status(rec2.masteragen_status)}
+                                                        </span>
+                                                    </td>
+                                                    <td NOWRAP  style="text-align: left;vertical-align: top;font-size: 11px;">{rec2.masteragen_id}</td>
+                                                    <td NOWRAP  style="text-align: left;vertical-align: top;font-size: 11px;">
+                                                        <span
+                                                            on:click={() => {
+                                                                //e,id,idmaster,idcurr,name,owner,email,phone1,phone2,note,status,idbank,norekbank,nmownerbank,create,update
+                                                                NewDataAgen("Edit",rec2.masteragen_id,rec.home_id,
+                                                                rec2.masteragen_idcurr,rec2.masteragen_nmagen,rec2.masteragen_owner,
+                                                                rec2.masteragen_email,rec2.masteragen_phone1,rec2.masteragen_phone2,
+                                                                rec2.masteragen_note,rec2.masteragen_status,rec2.masteragen_bank_id,
+                                                                rec2.masteragen_bank_norek,rec2.masteragen_bank_name,
+                                                                rec2.masteragen_create,rec2.masteragen_update);
+                                                            }} 
+                                                            style="cursor: pointer;text-decoration:underline;">{rec2.masteragen_nmagen}</span>
+                                                    </td>
+                                                </tr>
+                                                {/each}
+                                            </tbody>
+                                        </table>
                                     </td>
                                 </tr>
                             {/each}
