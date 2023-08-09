@@ -22,6 +22,7 @@
     let sData = "";
     let sDataAdmin = "";
     let sDataAgen = "";
+    let sDataAgenAdmin = "";
     let myModal_newentry = "";
     let flag_btnsave = true;
     let idcurr_field = "";
@@ -65,10 +66,27 @@
     let agen_create_field = "";
     let agen_update_field = "";
 
+    //AGEN ADMIN
+    let listAgenAdmin = "";
+    let filterAgenAdmin = "";
+    let searchAgenAdmin = "";
+    let idmasteragen = "";
+    let agenadmin_idagen_field = "";
+    let agenadmin_tipe_field = "";
+    let agenadmin_username_field = "";
+    let agenadmin_password_field = "";
+    let agenadmin_name_field = "";
+    let agenadmin_phone1_field = "";
+    let agenadmin_phone2_field = "";
+    let agenadmin_status_field = "";
+    let agenadmin_create_field = "";
+    let agenadmin_update_field = "";
+
 
     let idrecord = "";
     let idrecordmasteradmin = "";
     let idrecordmasteragen = "";
+    let idrecordmasteragenadmin = "";
     let searchHome = "";
     let filterHome = [];
     let css_loader = "display: none;";
@@ -84,6 +102,16 @@
             );
         } else {
             filterHome = [...listHome];
+        }
+        if (searchAgenAdmin) {
+            filterAgenAdmin = listAgenAdmin.filter(
+                (item) =>
+                    item.masteragenadmin_username
+                        .toLowerCase()
+                        .includes(searchAgenAdmin.toLowerCase())
+            );
+        } else {
+            filterAgenAdmin = [...listAgenAdmin];
         }
     }
     
@@ -164,6 +192,76 @@
         myModal_newentry.show();
         
     };
+    const ShowFormAgenAdmin = (e, id, tipe, username,name,phone1,phone2,status,create,update) => {
+        sDataAgenAdmin = e;
+        if (e == "Edit") {
+            idrecordmasteragenadmin = id;
+            agenadmin_tipe_field = tipe;
+            agenadmin_username_field = username;
+            agenadmin_name_field = name;
+            agenadmin_phone1_field = phone1;
+            agenadmin_phone2_field = phone2;
+            agenadmin_status_field = status;
+            agenadmin_create_field = create;
+            agenadmin_update_field = update;
+        } else {
+            clearField_masteragenadmin();
+        }
+
+        myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud_agenadmin"));
+        myModal_newentry.show();
+    };
+    const showListAgenAdmin = (idagen) => {
+        if(idagen != "" || idagen != undefined){
+            idmasteragen = idagen;
+            agenadmin_idagen_field = idagen;
+            myModal_newentry = new bootstrap.Modal(document.getElementById("modalagenadmin"));
+            myModal_newentry.show();
+            call_agenadmin(idagen);
+        }
+        
+    };
+    async function call_agenadmin(idagen) {
+        listAgenAdmin = [];
+        const res = await fetch("/api/masteragenadmin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+                page: "MASTERAGEN-ADMIN",
+                masteragen_idagen: idagen,
+            }),
+        });
+        const json = await res.json();
+        if (json.status == 200) {
+            let record = json.record;
+            if (record != null) {
+                let no = 0;
+                for (var i = 0; i < record.length; i++) {
+                    no = no + 1;
+                    listAgenAdmin = [
+                        ...listAgenAdmin,
+                        {
+                        masteragenadmin_no: no,
+                        masteragenadmin_id: record[i]["masteragenadmin_id"],
+                        masteragenadmin_tipe: record[i]["masteragenadmin_tipe"],
+                        masteragenadmin_username: record[i]["masteragenadmin_username"],
+                        masteragenadmin_lastlogin: record[i]["masteragenadmin_lastlogin"],
+                        masteragenadmin_name: record[i]["masteragenadmin_name"],
+                        masteragenadmin_phone1: record[i]["masteragenadmin_phone1"],
+                        masteragenadmin_phone2: record[i]["masteragenadmin_phone2"],
+                        masteragenadmin_status: record[i]["masteragenadmin_status"],
+                        masteragenadmin_status_css: record[i]["masteragenadmin_status_css"],
+                        masteragenadmin_create: record[i]["masteragenadmin_create"],
+                        masteragenadmin_update: record[i]["masteragenadmin_update"],
+                        },
+                    ];
+                }
+            }
+        }
+    }
     const RefreshHalaman = () => {
         dispatch("handleRefreshData", "call");
     };
@@ -540,6 +638,115 @@
             alert(msg)
         }
     }
+    async function handleMasterAgenAdminSave() {
+        let flag = true
+        let msg = ""
+        if(sDataAgenAdmin == "New"){
+            if(agenadmin_idagen_field == ""){
+                flag = false
+                msg += "The Code Agen is required\n"
+            }
+            if(agenadmin_tipe_field == ""){
+                flag = false
+                msg += "The Tipe is required\n"
+            }
+            if(agenadmin_username_field == ""){
+                flag = false
+                msg += "The Username is required\n"
+            }
+            if(agenadmin_password_field == ""){
+                flag = false
+                msg += "The Password is required\n"
+            }
+            if(agenadmin_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(agenadmin_phone1_field == ""){
+                flag = false
+                msg += "The Phone is required\n"
+            }
+            if(agenadmin_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }else{
+            if(idrecordmasteragenadmin == ""){
+                flag = false
+                msg += "The ID is required\n"
+            }
+            if(agenadmin_idagen_field == ""){
+                flag = false
+                msg += "The Code Agen is required\n"
+            }
+            if(agenadmin_tipe_field == ""){
+                flag = false
+                msg += "The Tipe is required\n"
+            }
+            if(agenadmin_username_field == ""){
+                flag = false
+                msg += "The Username is required\n"
+            }
+            if(agenadmin_name_field == ""){
+                flag = false
+                msg += "The Name is required\n"
+            }
+            if(agenadmin_phone1_field == ""){
+                flag = false
+                msg += "The Phone is required\n"
+            }
+            if(agenadmin_status_field == ""){
+                flag = false
+                msg += "The Status is required\n"
+            }
+        }
+        
+        if(flag){
+            flag_btnsave = false;
+            css_loader = "display: inline-block;";
+            msgloader = "Sending...";
+            const res = await fetch("/api/masteragenadminsave", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify({
+                    sdata: sDataAgenAdmin,
+                    page:"MASTER-SAVE",
+                    masteragenadmin_id: idrecordmasteragenadmin,
+                    masteragenadmin_idmasteragen: agenadmin_idagen_field,
+                    masteragenadmin_tipe: agenadmin_tipe_field,
+                    masteragenadmin_username: agenadmin_username_field,
+                    masteragenadmin_password: agenadmin_password_field,
+                    masteragenadmin_name: agenadmin_name_field,
+                    masteragenadmin_phone1: agenadmin_phone1_field,
+                    masteragenadmin_phone2: agenadmin_phone2_field,
+                    masteragenadmin_status: agenadmin_status_field,
+                }),
+            });
+            const json = await res.json();
+            if (json.status == 200) {
+                flag_btnsave = true;
+                if(sDataAgenAdmin=="New"){
+                    clearField_masteragenadmin()
+                }
+                msgloader = json.message;
+                call_agenadmin(idmasteragen)
+            } else if(json.status == 403){
+                flag_btnsave = true;
+                alert(json.message)
+            } else {
+                flag_btnsave = true;
+                msgloader = json.message;
+            }
+            setTimeout(function () {
+                css_loader = "display: none;";
+            }, 1000);
+        }else{
+            alert(msg)
+        }
+    }
     function clearField(){
         idrecord = "";
         idcurr_field = "";
@@ -583,6 +790,18 @@
         agen_create_field = "";
         agen_update_field = "";
     }
+    function clearField_masteragenadmin(){
+        idrecordmasteragenadmin = "";
+        agenadmin_tipe_field = "";
+        agenadmin_username_field = "";
+        agenadmin_password_field = "";
+        agenadmin_name_field = "";
+        agenadmin_phone1_field = "";
+        agenadmin_phone2_field = "";
+        agenadmin_status_field = "";
+        agenadmin_create_field = "";
+        agenadmin_update_field = "";
+    }
     function callFunction(event){
         switch(event.detail){
             case "NEW":
@@ -592,6 +811,9 @@
                 RefreshHalaman();break;
             case "SAVE":
                 handleSubmit();break;
+            case "FORMNEW_AGENADMIN":
+                ShowFormAgenAdmin("New");
+                break;
         }
     }
     const handleKeyboard_checkenter = (e) => {
@@ -605,6 +827,7 @@
                 dispatch("handleTafsirMimpi", tafsir);
         }  
     };
+  
     function status(e){
         let result = "DEACTIVE"
         if(e == "Y"){
@@ -615,6 +838,17 @@
     function uperCase(element) {
         function onInput(event) {
             element.value = element.value.toUpperCase();
+        }
+        element.addEventListener("input", onInput);
+        return {
+            destroy() {
+                element.removeEventListener("input", onInput);
+            },
+        };
+    }
+    function lowerCase(element) {
+        function onInput(event) {
+            element.value = element.value.toLowerCase();
         }
         element.addEventListener("input", onInput);
         return {
@@ -778,7 +1012,7 @@
                                                 <tr>
                                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                                         <i on:click={() => {
-                                                                NewDataAdmin("New",idrecordmasteradmin,rec.home_id);
+                                                                showListAgenAdmin(rec2.masteragen_id);
                                                             }} class="bi bi-person-plus"></i>
                                                     </td>
                                                     <td NOWRAP  style="text-align: center;vertical-align: top;font-size: 11px;">
@@ -961,7 +1195,6 @@
         {/if}
 	</slot:template>
 </Modal>
-
 
 <Modal
 	modal_id="modalentrycrud_admin"
@@ -1175,6 +1408,167 @@
         {#if flag_btnsave}
         <Button on:click={() => {
                 handleAgenSave();
+            }} 
+            button_function="SAVE"
+            button_title="Save"
+            button_css="btn-warning"/>
+        {/if}
+	</slot:template>
+</Modal>
+
+<Modal
+  modal_id="modalagenadmin"
+  modal_size="modal-dialog-centered modal-lg"
+  modal_title="ADMIN - {idmasteragen}"
+  modal_body_css="height:500px; overflow-y: scroll;"
+  modal_footer_css="padding:5px;"
+  modal_footer={true}
+  modal_search={true}>
+  <slot:template slot="search">
+    <div class="col-lg-12" style="padding: 5px;">
+      <input
+        bind:value={searchAgenAdmin}
+        type="text"
+        class="form-control"
+        placeholder="Search Username"
+        aria-label="Search"/>
+    </div>
+  </slot:template>
+  <slot:template slot="body">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+            <th width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">STATUS</th>
+            <th width="5%" style="text-align: left;vertical-align: top;font-weight:bold;font-size:{table_header_font};">TYPE</th>
+            <th width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size:{table_header_font};">USERNAME</th>
+            <th width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size:{table_header_font};">LASTLOGIN</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each filterAgenAdmin as rec}
+          <tr on:click={() => {
+                //e, id, tipe, username,name,phone1,phone2,status,create,update
+              ShowFormAgenAdmin("Edit",rec.masteragenadmin_id, rec.masteragenadmin_tipe,rec.masteragenadmin_username,
+              rec.masteragenadmin_name,rec.masteragenadmin_phone1,rec.masteragenadmin_phone2,rec.masteragenadmin_status,
+              rec.masteragenadmin_create,rec.masteragenadmin_update);
+            }} style="color:blue;text-decoration:underline;cursor:pointer;">
+            <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
+                <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec.masteragenadmin_status_css}">
+                    {status(rec.masteragenadmin_status)}
+                </span>
+            </td>
+            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_tipe}</td>
+            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_username}</td>
+            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_lastlogin}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </slot:template>
+  <slot:template slot="footer">
+    <Button
+      on:click={callFunction}
+      button_function="FORMNEW_AGENADMIN"
+      button_title="New"
+      button_css="btn-primary"/>
+  </slot:template>
+</Modal>
+
+<Modal
+	modal_id="modalentrycrud_agenadmin"
+	modal_size="modal-dialog-centered modal-lg"
+	modal_title="AGEN - {idmasteragen} - {title_page_admin+"/"+sDataAgenAdmin}"
+    modal_footer_css="padding:5px;"
+	modal_footer={true}>
+	<slot:template slot="body">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Tipe</label>
+                    <select
+                        bind:value="{agenadmin_tipe_field}" 
+                        name="currency" id="Tipe" 
+                        class="required form-control">
+                        <option value="MASTER">MASTER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">username</label>
+                    {#if sDataAgenAdmin == "New"}
+                    <input bind:value={agenadmin_username_field}
+                        use:lowerCase
+                        class="required form-control"
+                        maxlength="20"
+                        type="text"
+                        placeholder="USERNAME"/>
+                    {:else}
+                    <input bind:value={agenadmin_username_field}
+                        use:lowerCase
+                        disabled
+                        class="required form-control"
+                        maxlength="20"
+                        type="text"
+                        placeholder="USERNAME"/>
+                    {/if}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Password</label>
+                    <input
+                        bind:value={agenadmin_password_field}
+                        type="password"
+                        maxlength="30"
+                        class="form-control "
+                        placeholder="Password"
+                        aria-label="Password"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Name</label>
+                    <Input bind:value={agenadmin_name_field}
+                        class="required"
+                        type="text"
+                        placeholder="Name"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 1</label>
+                    <Input bind:value={agenadmin_phone1_field}
+                        class="required"
+                        type="text"
+                        placeholder="Phone 1"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Phone 2</label>
+                    <Input bind:value={agenadmin_phone2_field}
+                        class=""
+                        type="text"
+                        placeholder="Phone 2"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleForm" class="form-label">Status</label>
+                    <select
+                        class="form-control required"
+                        bind:value={agenadmin_status_field}>
+                        <option value="Y">ACTIVE</option>
+                        <option value="N">DEACTIVE</option>
+                    </select>
+                </div>
+                {#if sData != "New"}
+                    <div class="mb-3">
+                        <div class="alert alert-secondary" style="font-size: 11px; padding:10px;" role="alert">
+                            Create : {agenadmin_create_field}<br />
+                            Update : {agenadmin_update_field}
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        </div>
+	</slot:template>
+	<slot:template slot="footer">
+        {#if flag_btnsave}
+        <Button on:click={() => {
+                handleMasterAgenAdminSave();
             }} 
             button_function="SAVE"
             button_title="Save"
