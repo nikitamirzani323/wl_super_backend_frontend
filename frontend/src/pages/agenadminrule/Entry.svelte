@@ -43,7 +43,7 @@
         dispatch("handleBackHalaman", "call");
     };
     async function SaveTransaksi(name) {
-        const res = await fetch("/api/saveadminrule", {
+        const res = await fetch("/api/saveagenadminrule", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +51,7 @@
             },
             body: JSON.stringify({
                 sdata: sData,
-                page: "ADMINRULE-SAVE",
+                page: "AGENADMINRULE-SAVE",
                 adminrule_idadmin: name,
                 adminrule_rule: adminrule_rule_field,
             }),
@@ -78,7 +78,7 @@
             msg += "The List is required\n";
         }
         if (flag == false) {
-            const res = await fetch("/api/saveadminrule", {
+            const res = await fetch("/api/saveagenadminrule", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,7 +86,7 @@
                 },
                 body: JSON.stringify({
                     sdata: sData,
-                    page: "ADMINRULE-SAVE",
+                    page: "AGENADMINRULE-SAVE",
                     adminrule_idadmin: adminrule_idadmin,
                     adminrule_rule: adminrule_rule_field.toString(),
                 }),
@@ -97,7 +97,11 @@
             } else if (json.status == 403) {
                 alert(json.message);
             } else {
-                msgloader = json.message;
+                if(json.message != ""){
+                    msgloader = json.message;
+                }else{
+                    msgloader = "Error";
+                }
             }
             setTimeout(function () {
                 css_loader = "display: none;";
@@ -295,26 +299,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th colspan="2">ADMIN MANAGEMENT</th>
-                                <th colspan="2">ADMIN RULE</th>
                                 <th colspan="2">AGEN ADMIN MANAGEMENT</th>
                                 <th colspan="2">AGEN ADMIN RULE</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMIN-VIEW"/>
-                                </td>
-                                <td width="*">VIEW</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMINRULE-VIEW"/>
-                                </td>
-                                <td width="*">VIEW</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"
@@ -329,18 +319,6 @@
                                 <td width="*">VIEW</td>
                             </tr>
                             <tr>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMIN-SAVE"/>
-                                </td>
-                                <td width="*">SAVE</td>
-                                <td width="1%">
-                                    <input bind:group={adminrule_rule_field}
-                                        type="checkbox"
-                                        value="ADMINRULE-SAVE"/>
-                                </td>
-                                <td width="*">SAVE</td>
                                 <td width="1%">
                                     <input bind:group={adminrule_rule_field}
                                         type="checkbox"

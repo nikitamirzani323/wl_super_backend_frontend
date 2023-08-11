@@ -6,6 +6,7 @@
 	
 	import Admin from "./pages/admin/Admin.svelte";
 	import Adminrule from "./pages/adminrule/Adminrule.svelte";
+	import Agenadminrule from "./pages/agenadminrule/Agenadminrule.svelte";
 	import Provider from "./pages/provider/Provider.svelte";
 	import Currency from "./pages/currency/Currency.svelte";
 	import Catebank from "./pages/catebank/Catebank.svelte";
@@ -34,6 +35,13 @@
 					table_body_font: table_body_font,
 				},
 				component: Dashboard,
+			}),
+			"/agenadminrule": wrap({
+				component: Agenadminrule,
+				props: {
+					table_header_font: table_header_font,
+					table_body_font: table_body_font,
+				},
 			}),
 			"/categame": wrap({
 				component: Categame,
