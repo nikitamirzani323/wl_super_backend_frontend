@@ -10,6 +10,13 @@ import (
 	"github.com/nikitamirzani323/wl_super_backend_frontend/entities"
 )
 
+type responseagenrule struct {
+	Status   int         `json:"status"`
+	Message  string      `json:"message"`
+	Listagen interface{} `json:"listagen"`
+	Record   interface{} `json:"record"`
+}
+
 func Adminrulehome(c *fiber.Ctx) error {
 	hostname := c.Hostname()
 	bearToken := c.Get("Authorization")
@@ -149,7 +156,7 @@ func Agenadminrulehome(c *fiber.Ctx) error {
 	render_page := time.Now()
 	axios := resty.New()
 	resp, err := axios.R().
-		SetResult(responsedefault{}).
+		SetResult(responseagenrule{}).
 		SetAuthToken(token[1]).
 		SetError(responseerror{}).
 		SetHeader("Content-Type", "application/json").
@@ -170,13 +177,14 @@ func Agenadminrulehome(c *fiber.Ctx) error {
 	log.Println("  Received At:", resp.ReceivedAt())
 	log.Println("  Body       :\n", resp)
 	log.Println()
-	result := resp.Result().(*responsedefault)
+	result := resp.Result().(*responseagenrule)
 	if result.Status == 200 {
 		return c.JSON(fiber.Map{
-			"status":  result.Status,
-			"message": result.Message,
-			"record":  result.Record,
-			"time":    time.Since(render_page).String(),
+			"status":   result.Status,
+			"message":  result.Message,
+			"record":   result.Record,
+			"listagen": result.Listagen,
+			"time":     time.Since(render_page).String(),
 		})
 	} else {
 		result_error := resp.Error().(*responseerror)
@@ -189,10 +197,12 @@ func Agenadminrulehome(c *fiber.Ctx) error {
 }
 func AgenadminruleSave(c *fiber.Ctx) error {
 	type payload_agenadminrulesave struct {
-		Page    string `json:"page"`
-		Sdata   string `json:"sdata" `
-		Idadmin string `json:"adminrule_idadmin" `
-		Rule    string `json:"adminrule_rule" `
+		Page                 string `json:"page"`
+		Sdata                string `json:"sdata" `
+		Agenadminrule_id     int    `json:"agenadminrule_id" `
+		Agenadminrule_idagen string `json:"agenadminrule_idagen" `
+		Agenadminrule_name   string `json:"agenadminrule_name" `
+		Agenadminrule_rule   string `json:"agenadminrule_rule" `
 	}
 	hostname := c.Hostname()
 	bearToken := c.Get("Authorization")
@@ -217,11 +227,13 @@ func AgenadminruleSave(c *fiber.Ctx) error {
 		SetError(responseerror{}).
 		SetHeader("Content-Type", "application/json").
 		SetBody(map[string]interface{}{
-			"client_hostname":    hostname,
-			"page":               client.Page,
-			"sdata":              client.Sdata,
-			"agenadminrule_id":   client.Idadmin,
-			"agenadminrule_rule": client.Rule,
+			"client_hostname":      hostname,
+			"page":                 client.Page,
+			"sdata":                client.Sdata,
+			"agenadminrule_id":     client.Agenadminrule_id,
+			"agenadminrule_idagen": client.Agenadminrule_idagen,
+			"agenadminrule_name":   client.Agenadminrule_name,
+			"agenadminrule_rule":   client.Agenadminrule_rule,
 		}).
 		Post(PATH + "api/saveagenadminrule")
 	if err != nil {

@@ -3,10 +3,14 @@
     import Entry from "../agenadminrule/Entry.svelte";
 
     let listAdminrule = [];
+    let listAgen = [];
     let sData = "";
     let record = "";
     let totalrecord = 0;
-    let adminrule_idadmin = "";
+    let adminrule_idadmin = 0;
+    let adminrule_idagen = "";
+    let adminrule_nmagen = "";
+    let adminrule_name = "";
     let adminrule_rule = "";
     export let table_header_font = "";
     export let table_body_font = "";
@@ -47,9 +51,10 @@
         const json = await res.json();
         if (json.status == 200) {
             record = json.record;
-            totalrecord = record.length;
+            let record_listagen = json.listagen;
             let no = 0;
             if (record != null) {
+                totalrecord = record.length;
                 for (var i = 0; i < record.length; i++) {
                     no = no + 1;
                     listAdminrule = [
@@ -57,10 +62,24 @@
                         {
                             adminrule_no: no,
                             adminrule_idadmin: record[i]["agenadminrule_id"],
+                            adminrule_idagen: record[i]["agenadminrule_idagen"],
+                            adminrule_agen: record[i]["agenadminrule_nmagen"],
+                            adminrule_name: record[i]["agenadminrule_name"],
                             adminrule_rule: record[i]["agenadminrule_rule"],
+                            adminrule_create: record[i]["agenadminrule_create"],
+                            adminrule_update: record[i]["agenadminrule_update"],
                         },
                     ];
                 }
+            }
+            for (var i = 0; i < record_listagen.length; i++) {
+                listAgen = [
+                    ...listAgen,
+                    {
+                        masteragen_id: record_listagen[i]["masteragen_id"],
+                        masteragen_nmagen: record_listagen[i]["masteragen_nmagen"],
+                    },
+                ];
             }
         } else {
             logout();
@@ -75,15 +94,20 @@
         adminrule_rule = "";
         sData = "";
         listAdminrule = [];
+        listAgen = [];
         handleRefreshData("all");
     };
     const handleEditData = (e) => {
-        adminrule_idadmin = e.detail.e;
-        adminrule_rule = e.detail.f;
+        adminrule_idadmin = e.detail.id;
+        adminrule_idagen = e.detail.idagen;
+        adminrule_nmagen = e.detail.nmagen;
+        adminrule_name = e.detail.name;
+        adminrule_rule = e.detail.rule;
         sData = "Edit";
     };
     const handleRefreshData = (e) => {
         listAdminrule = [];
+        listAgen = [];
         totalrecord = 0;
         setTimeout(function () {
             initAdminrule();
@@ -101,6 +125,7 @@
             {table_header_font}
             {table_body_font}
             {listAdminrule}
+            {listAgen}
             {totalrecord}
         />
     {:else}
@@ -111,6 +136,9 @@
             {table_header_font}
             {table_body_font}
             {adminrule_idadmin}
+            {adminrule_idagen}
+            {adminrule_nmagen}
+            {adminrule_name}
             {adminrule_rule}
         />
     {/if}

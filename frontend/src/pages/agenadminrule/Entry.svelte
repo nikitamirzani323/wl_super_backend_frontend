@@ -6,7 +6,10 @@
     import * as yup from "yup";
     export let sData = "";
     export let token = "";
-    export let adminrule_idadmin = "";
+    export let adminrule_idadmin = 0;
+    export let adminrule_idagen = "";
+    export let adminrule_nmagen = "";
+    export let adminrule_name = "";
     export let adminrule_rule = "";
     let adminrule_rule_field = adminrule_rule;
 
@@ -26,7 +29,7 @@
     });
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
-            admin_name_field: adminrule_idadmin,
+            admin_name_field: adminrule_name,
         },
         validationSchema: schema,
         onSubmit: (values) => {
@@ -43,6 +46,8 @@
         dispatch("handleBackHalaman", "call");
     };
     async function SaveTransaksi(name) {
+        css_loader = "display: inline-block;";
+        msgloader = "Sending...";
         const res = await fetch("/api/saveagenadminrule", {
             method: "POST",
             headers: {
@@ -52,8 +57,10 @@
             body: JSON.stringify({
                 sdata: sData,
                 page: "AGENADMINRULE-SAVE",
-                adminrule_idadmin: name,
-                adminrule_rule: adminrule_rule_field,
+                agenadminrule_id: parseInt(adminrule_idadmin),
+                agenadminrule_idagen: adminrule_idagen,
+                agenadminrule_name: name,
+                agenadminrule_rule: adminrule_rule_field.toString(),
             }),
         });
         const json = await res.json();
@@ -87,8 +94,10 @@
                 body: JSON.stringify({
                     sdata: sData,
                     page: "AGENADMINRULE-SAVE",
-                    adminrule_idadmin: adminrule_idadmin,
-                    adminrule_rule: adminrule_rule_field.toString(),
+                    agenadminrule_id: parseInt(adminrule_idadmin),
+                    agenadminrule_idagen: adminrule_idagen,
+                    agenadminrule_name: $form.admin_name_field,
+                    agenadminrule_rule: adminrule_rule_field.toString(),
                 }),
             });
             const json = await res.json();
@@ -156,6 +165,17 @@
                     </div>
                 </div>
                 <div class="card-body" style="height:400px;">
+                    <div class="mb-3">
+                        <label for="exampleForm" class="form-label">List Agen</label>
+                        <input
+                            bind:value={adminrule_nmagen}
+                            type="text"
+                            disabled
+                            maxlength="70"
+                            class="form-control"
+                            placeholder="List Agen"
+                            aria-label="List Agen"/>
+                    </div>
                     <div class="mb-3">
                         <label for="exampleForm" class="form-label">Name</label>
                         <input

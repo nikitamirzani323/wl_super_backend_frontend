@@ -11,29 +11,35 @@
     export let table_body_font;
     export let token;
     export let listAdminrule = [];
+    export let listAgen = [];
     export let totalrecord = 0;
     let dispatch = createEventDispatcher();
     let title_page = "Agen Admin Rule";
     let sData = "";
     let myModal_newentry = "";
+    let idrecord = 0;
     let css_loader = "display: none;";
     let msgloader = "";
 
     const schema = yup.object().shape({
+        idagen: yup
+            .string()
+            .required("The List Agen is required"),
         name: yup
             .string()
-            .required("The Rule is required")
-            .matches(/^[a-z0-9]+$/, "Rule must Character a-z or 1-9 ")
-            .min(3, "The Rule minimal 3 Character")
-            .max(30, "The Rule mmaximal 30 Character"),
+            .required("The Name is required")
+            .matches(/^[a-z0-9]+$/, "Name must Character a-z or 1-9 ")
+            .min(3, "The Name minimal 3 Character")
+            .max(30, "The Name maximal 30 Character"),
     });
     const { form, errors, handleChange, handleSubmit } = createForm({
         initialValues: {
+            idagen: "",
             name: "",
         },
         validationSchema: schema,
         onSubmit: (values) => {
-            handleSave(values.name);
+            handleSave(values.idagen,values.name);
         },
     });
     const NewData = () => {
@@ -47,14 +53,14 @@
     const RefreshHalaman = () => {
         dispatch("handleRefreshData", "call");
     };
-    const EditData = (e, f) => {
+    const EditData = (id, idagen, nmagen,name,rule) => {
         const adminrule = {
-            e,
-            f,
+            id,idagen,
+            nmagen,name,rule
         };
         dispatch("handleEditData", adminrule);
     };
-    async function handleSave(name) {
+    async function handleSave(idagen,name) {
         const res = await fetch("/api/saveagenadminrule", {
             method: "POST",
             headers: {
@@ -64,8 +70,10 @@
             body: JSON.stringify({
                 sdata: sData,
                 page: "AGENADMINRULE-SAVE",
-                adminrule_idadmin: name,
-                adminrule_rule: "",
+                agenadminrule_id: parseInt(idrecord),
+                agenadminrule_idagen: idagen,
+                agenadminrule_name: name,
+                agenadminrule_rule: "",
             }),
         });
         const json = await res.json();
@@ -83,8 +91,6 @@
         }, 1000);
     }
     function clearField() {
-        $form.username = "";
-        $form.password = "";
         $form.rule = "";
         $form.name = "";
     }
@@ -120,14 +126,12 @@
                 on:click={callFunction}
                 button_function="NEW"
                 button_title="New"
-                button_css="btn-dark"
-            />
+                button_css="btn-dark"/>
             <Button
                 on:click={callFunction}
                 button_function="REFRESH"
                 button_title="Refresh"
-                button_css="btn-primary"
-            />
+                button_css="btn-primary"/>
             <Panel card_title={title_page} card_footer={totalrecord}>
                 <slot:template slot="card-body">
                     <table class="table table-striped ">
@@ -135,7 +139,10 @@
                             <tr>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;">&nbsp;</th>
                                 <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-weight:bold;font-size:{table_header_font};">NO</th>
+                                <th NOWRAP width="10%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">AGEN</th>
                                 <th NOWRAP width="*" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">RULE</th>
+                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">CREATE</th>
+                                <th NOWRAP width="15%" style="text-align: left;vertical-align: top;font-weight:bold;font-size: {table_header_font};">UPDATE</th>
                             </tr>
                         </thead>
                         {#if totalrecord > 0}
@@ -148,12 +155,18 @@
                                             <i on:click={() => {
                                                     EditData(
                                                         rec.adminrule_idadmin,
+                                                        rec.adminrule_idagen,
+                                                        rec.adminrule_agen,
+                                                        rec.adminrule_name,
                                                         rec.adminrule_rule
                                                     );
                                                 }} class="bi bi-pencil"/>
                                         </td>
                                         <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_no}</td>
-                                        <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_idadmin}</td>
+                                        <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_agen}</td>
+                                        <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_name}</td>
+                                        <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_create}</td>
+                                        <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.adminrule_update}</td>
                                     </tr>
                                 {/each}
                             </tbody>
@@ -183,6 +196,17 @@
     modal_footer={true}
 >
     <slot:template slot="body">
+        <div class="mb-3">
+            <label for="exampleForm" class="form-label">List Agen</label>
+            <select
+                bind:value="{$form.idagen}" 
+                name="agen" id="agen" 
+                class="required form-control">
+                {#each listAgen as rec}
+                <option value="{rec.masteragen_id}">{rec.masteragen_nmagen}</option>
+                {/each}
+            </select>
+        </div>
         <div class="mb-3">
             <label for="exampleForm" class="form-label">Name</label>
             <input on:change={handleChange}
