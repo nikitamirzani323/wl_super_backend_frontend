@@ -394,7 +394,6 @@ func MasteragenadminSave(c *fiber.Ctx) error {
 		Sdata                        string `json:"sdata" `
 		Masteragenadmin_id           string `json:"masteragenadmin_id" `
 		Masteragenadmin_idmasteragen string `json:"masteragenadmin_idmasteragen" `
-		Masteragenadmin_tipe         string `json:"masteragenadmin_tipe" `
 		Masteragenadmin_username     string `json:"masteragenadmin_username" `
 		Masteragenadmin_password     string `json:"masteragenadmin_password" `
 		Masteragenadmin_name         string `json:"masteragenadmin_name" `
@@ -429,7 +428,6 @@ func MasteragenadminSave(c *fiber.Ctx) error {
 			"sdata":                        client.Sdata,
 			"masteragenadmin_id":           client.Masteragenadmin_id,
 			"masteragenadmin_idmasteragen": client.Masteragenadmin_idmasteragen,
-			"masteragenadmin_tipe":         client.Masteragenadmin_tipe,
 			"masteragenadmin_username":     client.Masteragenadmin_username,
 			"masteragenadmin_password":     client.Masteragenadmin_password,
 			"masteragenadmin_name":         client.Masteragenadmin_name,

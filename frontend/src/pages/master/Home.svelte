@@ -72,7 +72,6 @@
     let searchAgenAdmin = "";
     let idmasteragen = "";
     let agenadmin_idagen_field = "";
-    let agenadmin_tipe_field = "";
     let agenadmin_username_field = "";
     let agenadmin_password_field = "";
     let agenadmin_name_field = "";
@@ -192,11 +191,10 @@
         myModal_newentry.show();
         
     };
-    const ShowFormAgenAdmin = (e, id, tipe, username,name,phone1,phone2,status,create,update) => {
+    const ShowFormAgenAdmin = (e, id, username,name,phone1,phone2,status,create,update) => {
         sDataAgenAdmin = e;
         if (e == "Edit") {
             idrecordmasteragenadmin = id;
-            agenadmin_tipe_field = tipe;
             agenadmin_username_field = username;
             agenadmin_name_field = name;
             agenadmin_phone1_field = phone1;
@@ -646,10 +644,6 @@
                 flag = false
                 msg += "The Code Agen is required\n"
             }
-            if(agenadmin_tipe_field == ""){
-                flag = false
-                msg += "The Tipe is required\n"
-            }
             if(agenadmin_username_field == ""){
                 flag = false
                 msg += "The Username is required\n"
@@ -678,10 +672,6 @@
             if(agenadmin_idagen_field == ""){
                 flag = false
                 msg += "The Code Agen is required\n"
-            }
-            if(agenadmin_tipe_field == ""){
-                flag = false
-                msg += "The Tipe is required\n"
             }
             if(agenadmin_username_field == ""){
                 flag = false
@@ -716,7 +706,6 @@
                     page:"MASTER-SAVE",
                     masteragenadmin_id: idrecordmasteragenadmin,
                     masteragenadmin_idmasteragen: agenadmin_idagen_field,
-                    masteragenadmin_tipe: agenadmin_tipe_field,
                     masteragenadmin_username: agenadmin_username_field,
                     masteragenadmin_password: agenadmin_password_field,
                     masteragenadmin_name: agenadmin_name_field,
@@ -792,7 +781,6 @@
     }
     function clearField_masteragenadmin(){
         idrecordmasteragenadmin = "";
-        agenadmin_tipe_field = "";
         agenadmin_username_field = "";
         agenadmin_password_field = "";
         agenadmin_name_field = "";
@@ -1445,23 +1433,29 @@
         </tr>
       </thead>
       <tbody>
-        {#each filterAgenAdmin as rec}
-          <tr on:click={() => {
-                //e, id, tipe, username,name,phone1,phone2,status,create,update
-              ShowFormAgenAdmin("Edit",rec.masteragenadmin_id, rec.masteragenadmin_tipe,rec.masteragenadmin_username,
-              rec.masteragenadmin_name,rec.masteragenadmin_phone1,rec.masteragenadmin_phone2,rec.masteragenadmin_status,
-              rec.masteragenadmin_create,rec.masteragenadmin_update);
-            }} style="color:blue;text-decoration:underline;cursor:pointer;">
-            <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
-                <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec.masteragenadmin_status_css}">
-                    {status(rec.masteragenadmin_status)}
-                </span>
-            </td>
-            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_tipe}</td>
-            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_username}</td>
-            <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_lastlogin}</td>
-          </tr>
-        {/each}
+        {#if filterAgenAdmin}
+            {#each filterAgenAdmin as rec}
+            <tr on:click={() => {
+                    //e, id, username,name,phone1,phone2,status,create,update
+                ShowFormAgenAdmin("Edit",rec.masteragenadmin_id,rec.masteragenadmin_username,
+                rec.masteragenadmin_name,rec.masteragenadmin_phone1,rec.masteragenadmin_phone2,rec.masteragenadmin_status,
+                rec.masteragenadmin_create,rec.masteragenadmin_update);
+                }} style="color:blue;text-decoration:underline;cursor:pointer;">
+                <td NOWRAP style="text-align: center;vertical-align: top;font-size: {table_body_font};">
+                    <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec.masteragenadmin_status_css}">
+                        {status(rec.masteragenadmin_status)}
+                    </span>
+                </td>
+                <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_tipe}</td>
+                <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_username}</td>
+                <td NOWRAP style="text-align: left;vertical-align: top;font-size: {table_body_font};">{rec.masteragenadmin_lastlogin}</td>
+            </tr>
+            {/each}
+        {:else}
+            <tr>
+                <td colspan=4><Loader /></td>
+            </tr>
+        {/if}
       </tbody>
     </table>
   </slot:template>
@@ -1483,16 +1477,6 @@
 	<slot:template slot="body">
         <div class="row">
             <div class="col-sm-6">
-                <div class="mb-3">
-                    <label for="exampleForm" class="form-label">Tipe</label>
-                    <select
-                        bind:value="{agenadmin_tipe_field}" 
-                        name="currency" id="Tipe" 
-                        class="required form-control">
-                        <option value="MASTER">MASTER</option>
-                        <option value="ADMIN">ADMIN</option>
-                    </select>
-                </div>
                 <div class="mb-3">
                     <label for="exampleForm" class="form-label">username</label>
                     {#if sDataAgenAdmin == "New"}
