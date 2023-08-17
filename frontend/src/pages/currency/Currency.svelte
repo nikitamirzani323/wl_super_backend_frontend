@@ -59,6 +59,7 @@
                             home_no: no,
                             home_id: record[i]["curr_id"],
                             home_name: record[i]["curr_name"],
+                            home_multiplier: record[i]["curr_multiplier"],
                             home_create: record[i]["curr_create"],
                             home_update: record[i]["curr_update"],
                         },
