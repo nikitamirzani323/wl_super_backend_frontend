@@ -83,10 +83,6 @@
                 flag = false
                 msg += "The Multiplier is required\n"
             }
-            if(multiplier_field){
-                flag = false
-                msg += "The Multiplier is required\n"
-            }
         }else{
             if(idrecord == ""){
                 flag = false
