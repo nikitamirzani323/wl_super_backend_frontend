@@ -81,6 +81,8 @@
     let agenadmin_create_field = "";
     let agenadmin_update_field = "";
 
+    //AGEN MEMBER
+    let listAgenMember = [];
 
     let idrecord = "";
     let idrecordmasteradmin = "";
@@ -209,13 +211,22 @@
         myModal_newentry = new bootstrap.Modal(document.getElementById("modalentrycrud_agenadmin"));
         myModal_newentry.show();
     };
-    const showListAgenAdmin = (idagen) => {
+    const showListAgen = (idagen,tipe) => {
         if(idagen != "" || idagen != undefined){
-            idmasteragen = idagen;
-            agenadmin_idagen_field = idagen;
-            myModal_newentry = new bootstrap.Modal(document.getElementById("modalagenadmin"));
-            myModal_newentry.show();
-            call_agenadmin(idagen);
+            if(tipe == "ADMIN"){
+                idmasteragen = idagen;
+                agenadmin_idagen_field = idagen;
+                myModal_newentry = new bootstrap.Modal(document.getElementById("modalagenadmin"));
+                myModal_newentry.show();
+                call_agenadmin(idagen);
+            }
+            if(tipe == "MEMBER"){
+                idmasteragen = idagen;
+                agenadmin_idagen_field = idagen;
+                myModal_newentry = new bootstrap.Modal(document.getElementById("modalagenadmin"));
+                myModal_newentry.show();
+                call_agenmember(idagen);
+            }
         }
         
     };
@@ -241,6 +252,47 @@
                     no = no + 1;
                     listAgenAdmin = [
                         ...listAgenAdmin,
+                        {
+                        masteragenadmin_no: no,
+                        masteragenadmin_id: record[i]["masteragenadmin_id"],
+                        masteragenadmin_tipe: record[i]["masteragenadmin_tipe"],
+                        masteragenadmin_username: record[i]["masteragenadmin_username"],
+                        masteragenadmin_lastlogin: record[i]["masteragenadmin_lastlogin"],
+                        masteragenadmin_name: record[i]["masteragenadmin_name"],
+                        masteragenadmin_phone1: record[i]["masteragenadmin_phone1"],
+                        masteragenadmin_phone2: record[i]["masteragenadmin_phone2"],
+                        masteragenadmin_status: record[i]["masteragenadmin_status"],
+                        masteragenadmin_status_css: record[i]["masteragenadmin_status_css"],
+                        masteragenadmin_create: record[i]["masteragenadmin_create"],
+                        masteragenadmin_update: record[i]["masteragenadmin_update"],
+                        },
+                    ];
+                }
+            }
+        }
+    }
+    async function call_agenmember(idagen) {
+        listAgenMember = [];
+        const res = await fetch("/api/masteragenmember", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+                page: "MASTERAGEN-ADMIN",
+                masteragen_idagen: idagen,
+            }),
+        });
+        const json = await res.json();
+        if (json.status == 200) {
+            let record = json.record;
+            if (record != null) {
+                let no = 0;
+                for (var i = 0; i < record.length; i++) {
+                    no = no + 1;
+                    listAgenMember = [
+                        ...listAgenMember,
                         {
                         masteragenadmin_no: no,
                         masteragenadmin_id: record[i]["masteragenadmin_id"],
@@ -989,7 +1041,7 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="1">&nbsp;</th>
+                                                    <th NOWRAP width="1%" style="text-align: center;vertical-align: top;" colspan="2">&nbsp;</th>
                                                     <th NOWRAP width="1%" style="text-align: center;vertical-align: top;font-size: 11px;">STATUS</th>
                                                     <th width="3%" style="text-align: left;vertical-align: top;font-size: 11px;">CODE</th>
                                                     <th width="*" style="text-align: left;vertical-align: top;font-size: 11px;">NAME</th>
@@ -1000,8 +1052,13 @@
                                                 <tr>
                                                     <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
                                                         <i on:click={() => {
-                                                                showListAgenAdmin(rec2.masteragen_id);
+                                                                showListAgen(rec2.masteragen_id,"ADMIN");
                                                             }} class="bi bi-person-plus"></i>
+                                                    </td>
+                                                    <td NOWRAP style="text-align: center;vertical-align: top;cursor:pointer;">
+                                                        <i on:click={() => {
+                                                                showListAgen(rec2.masteragen_id,"MEMBER");
+                                                            }} class="bi bi-people-fill"></i>
                                                     </td>
                                                     <td NOWRAP  style="text-align: center;vertical-align: top;font-size: 11px;">
                                                         <span style="padding: 5px;border-radius: 10px;padding-right:10px;padding-left:10px;{rec2.masteragen_status_css}">
